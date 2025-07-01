@@ -1,73 +1,82 @@
-# simulated_driving_behavior
-Evaluating quality of data augmentation using CARLA and SUMO driving simulators for classifying normal and aggressive behaviors of UAH-driveset.
+# Driver Behavior Classification using SUMO and CARLA Simulations
 
-# Repository Architecture
+This project uses synthetic driving data generated via **SUMO** and **CARLA** simulators to classify driver behavior (e.g., *aggressive*, *normal*). Multiple simulation configurations are used to augment the data and train robust machine learning models. The repository includes simulation tools, data processing pipelines, and evaluation notebooks.
 
+---
+
+## 🚦 Project Structure
+
+```
 driver-behavior-simulation/
-├── data/
-│   ├── base/                        # Real-world or reference dataset
-│   ├── synthetic/
-│   │   ├── sumo/
-│   │   │   ├── config_a/           # SUMO dataset with config A
-│   │   │   └── config_b/           # SUMO dataset with config B
-│   │   ├── carla/
-│   │   │   ├── config_a/           # CARLA dataset with config A
-│   │   │   └── config_b/           # CARLA dataset with config B
-│   ├── merged/                     # Combined datasets (for experiments)
-│   └── processed/                  # Cleaned, standardized datasets
+├── data/ # All datasets
+│ ├── base/ # Real-world or comparison dataset
+│ ├── synthetic/ # Generated via CARLA and SUMO
+│ │ ├── sumo/config_a/
+│ │ ├── sumo/config_b/
+│ │ ├── carla/config_a/
+│ │ └── carla/config_b/
+│ ├── merged/ # Datasets combined for experiments
+│ └── processed/ # Cleaned and feature-engineered data
 │
-├── notebooks/
-│   ├── 0_generate_sumo_data.ipynb  # SUMO synthetic generation
-│   ├── 0_generate_carla_data.ipynb # CARLA synthetic generation
-│   ├── 1_merge_datasets.ipynb      # Merge/aggregate datasets
-│   ├── 2_feature_engineering.ipynb # Feature extraction, normalization
-│   ├── 3_model_training.ipynb      # Model training & tuning
-│   ├── 4_evaluation.ipynb          # Model evaluation, confusion matrix
-│   └── 5_visualization.ipynb       # TSNE/UMAP plots, etc.
+├── notebooks/ # Jupyter notebooks for all major steps
+│ ├── 0_generate_sumo_data.ipynb
+│ ├── 0_generate_carla_data.ipynb
+│ ├── 1_merge_datasets.ipynb
+│ ├── 2_feature_engineering.ipynb
+│ ├── 3_model_training.ipynb
+│ ├── 4_evaluation.ipynb
+│ └── 5_visualization.ipynb
 │
-├── src/
-│   ├── sim/
-│   │   ├── sumo_utils.py           # Helpers for SUMO runs and logging
-│   │   └── carla_utils.py          # Helpers for CARLA simulation
-│   ├── data/
-│   │   ├── loader.py               # Load raw/synthetic/merged datasets
-│   │   └── preprocessor.py         # Scaling, filtering, etc.
-│   ├── features/
-│   │   └── extract_features.py     # Trajectory features, signal processing
-│   ├── models/
-│   │   ├── train.py                # Train a classifier
-│   │   ├── evaluate.py             # Accuracy, F1, etc.
-│   │   └── baselines.py            # Rule-based or simpler models
-│   └── utils/
-│       └── config.py               # Global config and constants
+├── src/ # Python modules
+│ ├── sim/ # Interfaces for CARLA and SUMO
+│ │ ├── sumo_utils.py
+│ │ └── carla_utils.py
+│ ├── data/ # Data loading and preprocessing
+│ ├── features/ # Feature extraction
+│ ├── models/ # ML training and evaluation
+│ └── utils/ # Config, helpers
 │
-├── configs/
-│   ├── sumo_config_a.xml
-│   ├── sumo_config_b.xml
-│   ├── carla_config_a.yaml
-│   └── carla_config_b.yaml
+├── configs/ # Simulation config files
+│ ├── sumo_config_a.xml
+│ ├── sumo_config_b.xml
+│ ├── carla_config_a.yaml
+│ └── carla_config_b.yaml
 │
-├── results/
-│   ├── logs/
-│   ├── metrics/
-│   └── figures/
+├── results/ # Experiment logs, figures, metrics
+│ ├── logs/
+│ ├── metrics/
+│ └── figures/
 │
 ├── requirements.txt
 ├── README.md
 └── .gitignore
+```
 
-# 🔑 Design Notes
 
-`data/synthetic/` holds raw generated data from SUMO/CARLA (split by config)
+## 📊 Objective
 
-`data/merged/` holds all combined scenarios for ML input
+Simulate and classify driving behavior using two distinct approaches:
 
-`src/sim/` includes reusable code to launch or parse SUMO/CARLA logs (e.g., TraCI interface, CARLA sensors)
+1. **Synthetic Data Generation**
+   - Generate trajectories using:
+     - CARLA behavior agents with various configurations
+     - SUMO vehicle models with varied acceleration, deceleration, and routing
+   - Label each dataset with the intended driver behavior (e.g., *aggressive*, *normal*)
 
-`notebooks/` follow a clean step-by-step data science workflow
+2. **Machine Learning**
+   - Preprocess raw simulation logs into usable features
+   - Merge synthetic datasets with real-world baselines
+   - Train and evaluate multiple classifiers:
+     - LSTM, CNN, Decision Tree, etc.
+   - Visualize results with t-SNE, UMAP, confusion matrices
 
-`configs/` stores simulation definitions for reproducibility
+---
 
-`results/` is where plots, metrics, logs live
+## 🛠️ Installation
 
-`src/models/` separates training, evaluation, and baseline logic
+```bash
+git clone https://github.com/yourusername/driver-behavior-simulation.git
+cd driver-behavior-simulation
+python -m venv venv
+source venv/bin/activate  # or venv\Scripts\activate on Windows
+pip install -r requirements.txt
