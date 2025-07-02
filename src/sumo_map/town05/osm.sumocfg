@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
+
+    <input>
+        <net-file value="osm.net.xml" />
+        <route-files value="merged.rou.xml" />
+    <additional-files value="debug.add.xml" /></input>
+
+    <gui_only>
+        <gui-settings-file value="viewsettings.xml" />
+    </gui_only>
+
+    <processing>
+        <time-to-teleport value="100" />
+    </processing>
+
+    <parameters>
+        <lateral-resolution value="0.8" />
+    </parameters>
+
+    <time>
+        <step-length value="0.01" />
+        <end value="" />
+    </time>
+
+</configuration>

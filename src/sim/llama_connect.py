@@ -1,0 +1,280 @@
+import os
+import json
+
+from groq import Groq
+from tqdm import tqdm
+from pandas import DataFrame
+
+client = Groq(
+    # Initialize the Groq client with the API key from environment variables
+    # Ensure that the environment variable GROQ_API_KEY is set with your Groq API key
+    # You can set this in your terminal or in a .env file
+    api_key=os.getenv("GROQ_API_KEY"),
+)
+
+
+def get_response(message: str) -> str:
+    """
+    Generates a response from the LLAMA model using the Groq API.
+    Args:
+        message (str): The message to be sent to the LLAMA model.
+    Returns:
+        str: The response from the LLAMA model.
+    """
+    instructions_content = (f"{message}"
+                            )
+    message = [
+        {
+            "role": "user",
+            "content": instructions_content,
+        }
+    ]
+
+    chat_completion = client.chat.completions.create(
+        messages=message, model="llama3-8b-8192")
+
+    return chat_completion.choices[0].message.content
+
+
+def get_response_trip(student_info: str, places: dict) -> str:
+    """ Generates a response for a student's daily routine trip using the LLAMA model.
+    Args:
+        student_info (str): Information about the student, such as their field of study.
+        places (dict): A dictionary containing various places categorized by their type, such as leisure,
+                       eating, shopping, sports, institutes, and university.
+    Returns:
+        str: A JSON formatted string representing the student's daily routine, including their current location
+              and activity for each hour of the day."""
+
+    institute = places['institute']
+    leisure = places['leisure']
+    eating = places['eating']
+    shopping = places['shopping']
+    sports = places['sports']
+
+    instructions_content = (f"Plan the information of the following student: {student_info}."
+                            )
+    message = [
+        {
+            "role": "system",
+            "content": "You need to plan the routine of a student. I want to know what they do during the day, including having lunch, studying, leisure, shopping and practicing sports. Whenever students are having classes or studying, they MUST be at one of the following places, according to what they are studying which are separated by OR: {institutes}. A biology student would most likely be at the Institute of Biology or at the Institute of Geociences, for example. A civil engineering student would most likely be at the Faculty of Civil Engineering. Whenever students are having lunch, breakfast or dinner, they MUST be at one of the following places: {eating}. Whenever students are having leisure, they MUST be at one of the following places: {leisure}. Whenever students are shopping, they MUST be at one of the following places: {shopping}. Whenever students are praticing sports, they MUST be at the following places: {sports}. Do not use any location that has not been provided. Students have lunch between 12 and 14 and dinner between 18 and 21. Students do not go to any institute after 20. Students only go to the gym once every day. Some days, students go the gas_station. Do not name the places, just choose one of the options. Students spend most of their day having classes at an institute. Your response should be in a JSON format showing only the current location and current activity. Never include locations to activities. Always start the day at time 7 at home and end the day at time 23 at home, update every hour. Locations always have a single place, never two. Follow the example where the first number is the time: {{'7': {{'location':'home', 'activity':'wake up'}}, '8': {{'location':'{institute}', 'activity':'study'}}, '9':{{'location':'cafe', 'activity':'breakfast'}}}}.".format(
+                institutes=" or ".join(institute),
+                institute=institute[0],
+                leisure=", ".join(leisure),
+                shopping=", ".join(shopping),
+                sports=", ".join(sports),
+                eating=", ".join(eating)
+            )
+        },
+        {
+            "role": "user",
+            "content": instructions_content,
+        }
+    ]
+    chat_completion = client.chat.completions.create(
+        messages=message, model="llama3-8b-8192", temperature=1, response_format={"type": "json_object"})
+
+    return chat_completion.choices[0].message.content
+
+
+def response_check(response: str, total_locations: list) -> bool:
+    """ Checks if the response from the LLM makes sense.
+    Args:
+        response (str): The response from the LLM in JSON format.
+        total_locations (list): A list of valid locations that the LLM can generate.
+    Returns:
+        bool: True if the response is valid, False otherwise.
+    """
+
+    response = json.loads(response)
+    if len(response) < 17:
+        print("Error: The response is missing some hours")
+        return False
+
+    if len(response) > 24:
+        print("Error: The response has too many hours")
+        return False
+
+    for item in response:
+        try:
+            local = response[item]['location']
+            if local not in total_locations or ',' in local:
+                print(f"Error: Invalid location generated '{local}'")
+                return False
+
+        except KeyError:
+            print("Error: The response is missing a key")
+            return False
+
+    return True
+
+
+def generate_response_trips(student_info: str, places: dict, number_of_trips: int = 5) -> list[str]:
+    """ Generates and verifies a list of responses for the student's daily routine trips using the LLAMA model.
+    Args:
+        student_info (str): Information about the student, such as their field of study.
+        places (dict): A dictionary containing various places categorized by their type, such as leisure,
+                       eating, shopping, sports, institutes, and university.
+        number_of_trips (int): The number of trips to generate for the student.
+    Returns:
+        list: A list of JSON formatted strings representing the student's daily routine trips.
+    """
+
+    responses = []
+    i = 0
+    total_locations = sum(places.values(), []) + ['home']
+
+    with tqdm(total=number_of_trips) as pbar:
+        while i < number_of_trips:
+            try:
+                response = get_response_trip(student_info, places)
+
+                if response_check(response, total_locations):
+                    responses.append(response)
+                    i += 1
+                    pbar.update(1)
+                else:
+                    print("Invalid response. Generating a new one.")
+
+            except Exception as e:
+                print(f"Error generating response {e}. Trying a new one.")
+
+    return responses
+
+
+def generate_range_parameters(parameters: str, styles: list[str]) -> str:
+    """ Generates the range of parameters for the vehicle types using the LLAMA model.
+    Args:
+        parameters (str): A string containing the parameters to be used in the generation.
+        styles (list): A list of styles for which the parameters will be generated.
+    Returns:
+        str: A JSON formatted string representing the range of values for each parameter and style.
+    """
+
+    instructions_content = (f"Give the range of values for the following styles: {styles}."
+                            )
+    message = [
+        {
+            "role": "system",
+            "content": "You need to return range of values in JSON for every one of the parameters that represent how a driver behaves in traffic, give an explanation for why you picked each value. Following, there is a list of parameter, default value, range [minimum-maximum] and description:\n {parameters}.\nThe more aggressive a driver is, the less they tend to cooperate in traffic and the more selfish they are. ALWAYS BE INSIDE THE RANGE LIMIT. Consider the default value for each parameter as a basis for a normal driver. Consider the answers you gave to the previous parameters when giving your answer. One parameter range of values must not be a subrange of any other parameter range, meaning you should not give overlap the range of other styles, if a aggressive style is given 'min': 0.2 and max: '0.5' for some paramter, another style can not have 'min':0.3, 'max':0.4' for this same paramters, because the ranges overlap each other. Keep the same distance between min and max for every style for each parameter. ALL THE PARAMETERS PROVIDED and BE ALWAYS IN THE SAME FOLLOWING FORMAT containing the parameter name, the style, the min and max values and the reason you picked those values. Note that every parameter has the same JSON structure that may NOT be changed. ALWAYS BE INSIDE THE RANGE LIMIT. PARAMETERS WITH ARE FACTORS WILL ALWAYS BE BETWEEN 0 AND 1. Example of proper JSON: {{'parameter': {{'style': {{'explanation': 'string', 'min': value, 'max': value}}}}}}. For example, if the styles are aggressive and normal: {{'lcCooperative': {{'aggressive': {{'explanation': 'aggresive drivers are not very cooperative', 'min': 0.2, 'max': 0.5}}, 'normal': {{'explanation': 'normal drivers are cooperative', 'min': 0.5, 'max': 0.8}}}}}}.".format(parameters=parameters)
+        },
+        {
+            "role": "user",
+            "content": instructions_content,
+        }
+    ]
+    try:
+        chat_completion = client.chat.completions.create(
+            messages=message, model="llama3-8b-8192", temperature=0.5, response_format={"type": "json_object"})
+
+    except Exception as e:
+        print(f"Error generating response {e}. Trying a new one.")
+        return generate_range_parameters(parameters, styles)
+
+    return chat_completion.choices[0].message.content
+
+
+def get_range_parameters(data: DataFrame, params: str, styles: list[str]) -> dict:
+    """ Generates the range of parameters for the vehicles using the LLAMA model.
+    Args:
+        data (pd.DataFrame): A DataFrame containing the parameters to be used in the generation.
+        params (str): A string containing the parameters to be used in the generation.
+        styles (list): A list of styles for which the parameters will be generated.
+    Returns:
+        dict: A dictionary with the range of values for each parameter and style.
+    """
+
+    # Generates the parameters for the vehicles
+    veh_parameters = generate_range_parameters(params, styles)
+    param_dict = json.loads(veh_parameters)
+    missing_params = [param for param in data['Parameter']
+                      if param not in list(param_dict.keys())]
+
+    while missing_params:
+        print(
+            f"Missing parameters in param_dict: {missing_params}. Trying new response.")
+        # Generates the parameters for the vehicles
+        veh_parameters = generate_range_parameters(params, styles)
+        param_dict = json.loads(veh_parameters)
+        missing_params = [param for param in data['Parameter']
+                          if param not in list(param_dict.keys())]
+
+    return param_dict
+
+
+def verify_parameters(parameters_dict: dict, styles: list, separate_distributions: bool = False):
+    """ Verifies the parameters generated by the LLAMA model to ensure they are within valid ranges and do not overlap. If they do, they are adjusted directly in the dictionary.
+    Args:
+        parameters_dict (dict): A dictionary containing the parameters and their ranges for each style.
+        styles (list): A list of styles for which the parameters are defined.
+        separate_distributions (bool): If True, the function will ensure that the distributions of parameters
+                                       for different styles do not overlap. If False, it will not check for this.
+    Returns:
+        None
+    """
+
+    # Trying to better separate the distributions of the parameteres
+    if separate_distributions:
+        for i in range(len(styles)):
+            for param in parameters_dict.keys():
+
+                if param == 'speedFactor':
+                    continue
+
+                values = parameters_dict[param][f'{styles[i]}']
+                if i < len(styles) - 1 and parameters_dict[param][f'{styles[i + 1]}']['min'] < values['max']:
+
+                    if values['max'] > parameters_dict[param][f'{styles[i + 1]}']['max']:
+                        print(
+                            f"{param} of {styles[i + 1]} is contained inside {styles[i]}")
+                        continue
+
+                    parameters_dict[param][f'{styles[i + 1]}']['min'] = values['max']
+
+                if float(values['max']) == float(values['min']):
+                    # If the min and max are the same, we need to adjust them to create a range
+                    values['min'] -= 0.2
+                    values['max'] += 0.2
+
+                if param.endswith('Factor'):
+                    # Factors should be between 0.1 and 0.9
+                    print(f"Verifying {param} for {styles[i]}: {values}")
+                    if float(values['min']) < 0.1:
+                        values['min'] = 0.1
+                    if float(values['max']) > 0.9:
+                        values['max'] = 0.9
+
+                    if float(values['min']) > float(values['max']):
+                        print(
+                            f"Warning: {param} for {styles[i]} has min > max. Inverting values.")
+                        values['min'], values['max'] = values['max'], values['min']
+
+                    if float(values['min']) == float(values['max']):
+                        values['min'] -= 0.1
+                        values['max'] += 0.1
+
+                if param == 'startupDelay':
+                    # Startup delay should be between 0 and 5 seconds
+                    print(f"Verifying {param} for {styles[i]}: {values}")
+                    if float(values['min']) < 0.3:
+                        values['min'] = 0.3
+                    if float(values['max']) > 5:
+                        values['max'] = 5
+
+    # Ensure maxSpeed accommodates the maximum speed implied by the distribution:
+    # max speed from distribution = speedFactor × default speed + 3 × deviation
+    values_speed = parameters_dict['maxSpeed']
+
+    for style in styles:
+        speed = values_speed[f'{style}']['max']
+        expected_mean_speed = (
+            values_speed[f'{style}']['max'] - values_speed[f'{style}']['min']) / 2
+        max_speedfactor = (speed - 10) / speed
+
+        print(
+            f"Expected mean speed: {expected_mean_speed}, max speedfactor: {max_speedfactor}, max_speed: {speed}")
+
+        parameters_dict['speedFactor'][f'{style}']['max'] = max_speedfactor + 0.1
+        parameters_dict['speedFactor'][f'{style}']['min'] = max_speedfactor - 0.1
+
+    print("Verification complete!")
