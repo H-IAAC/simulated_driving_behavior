@@ -354,6 +354,7 @@ def randomtrips_get_args(net_path: str, output_path: str, end_time: int, departu
     args = [
         "-n", net_path,
         "-r", f"{output_path}",
+        "-o", f"{'/'.join(output_path.split('/')[:-1])}/{output_path.split('/')[-1].split('.')[0].split('.')[0]}.trips.xml",
         "-e", str(end_time),
         "-p", str(departure_step),
         "--validate",

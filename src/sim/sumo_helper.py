@@ -258,6 +258,43 @@ def parse_veh_dist_xml(param_dict, vtypes_dist, styles, output_path, car_follow_
     return xml
 
 
+def parse_veh_fixed_xml(param_dict, styles, output_path, car_follow_model="IDM", lc_model="SL2015"):
+    """
+    Generates an XML file for fixed vehicle types based on the provided parameters and styles.
+    Args:
+        param_dict (dict): Dictionary containing fixed parameters for each style.
+        styles (list): List of styles for which the vehicle types are generated.
+        output_path (str): Folder where the XML file will be saved.
+        car_follow_model (str): Car-following model to be used for the vehicle types.
+        lc_model (str): Lane change model to be used for the vehicle types.
+    Returns:
+        xml (str): The generated XML string.
+    """
+
+    xml = "<root>\n"
+    for style in styles:
+        xml += f'<vTypeDistribution id=\"{style}\">\n'
+
+        xml += f'\t<vType id=\"veh_{style}\" carFollowModel=\"{car_follow_model}\" laneChangeModel=\"{lc_model}\" '
+
+        for parameter in param_dict.keys():
+            xml += f"{parameter}=\"{param_dict[parameter][style]}\" "
+
+        xml += 'probability="1.0">\n'
+        xml += '\t\t<param key="device.rerouting.probability" value="1.0"/>\n'
+        xml += '\t\t<param key="device.rerouting.adaptation-steps" value="18"/>\n'
+        xml += '\t\t<param key="device.rerouting.adaptation-interval" value="10"/>\n'
+        xml += '\t</vType>\n'
+
+        xml += "</vTypeDistribution>\n"
+
+    xml += "</root>\n"
+
+    with open(output_path, "w") as f:
+        f.write(xml)
+    return xml
+
+
 def merge_routes(routine_routes, random_routes, output_file_path):
     # Merges two route files into one
 

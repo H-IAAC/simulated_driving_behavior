@@ -19,7 +19,7 @@
     </parameters>
 
     <time>
-        <step-length value="0.01" />
+        <step-length value="0.1" />
         <end value="" />
     </time>
 
