@@ -511,13 +511,13 @@ def generate_vehicle_types(param_dict: dict, styles: list, n: int) -> dict:
     for style in styles:
         vtypes_dist[f'veh_{style}'] = {}
         for i in range(n):
-            vtypes_dist[f'veh_{style}'][f'v_{style}{i}'] = {}
+            vtypes_dist[f'veh_{style}'][f'veh_{style}{i}'] = {}
             prob = 0
             for parameter in list(param_dict.keys()):
                 # Gets value for parameter and the probability of getting that value
                 value, probability = get_param_value(
                     param_dict, parameter, style)
-                vtypes_dist[f'veh_{style}'][f'v_{style}{i}'][parameter] = float(
+                vtypes_dist[f'veh_{style}'][f'veh_{style}{i}'][parameter] = float(
                     value)
                 prob += probability  # Sum of probabilities for each parameter
 
@@ -528,7 +528,7 @@ def generate_vehicle_types(param_dict: dict, styles: list, n: int) -> dict:
 
         for i in range(n):
             # Assigning the normalized probability to each vType
-            vtypes_dist[f'veh_{style}'][f'v_{style}{i}']["probability"] = softm[i]
+            vtypes_dist[f'veh_{style}'][f'veh_{style}{i}']["probability"] = softm[i]
 
     return vtypes_dist
 

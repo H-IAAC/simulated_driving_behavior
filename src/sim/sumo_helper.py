@@ -25,6 +25,15 @@ def add_xml_child(file_path: str, parent_tag: str, child_tag: str, child_value: 
     Returns:
         bool: True if the addition was successful, False otherwise.
     """
+    import xml.dom.minidom
+
+    def pretty_write(tree, file_path):
+        # Convert ElementTree to string, then pretty print and write
+        rough_string = ET.tostring(tree.getroot(), encoding='utf-8')
+        reparsed = xml.dom.minidom.parseString(rough_string)
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(reparsed.toprettyxml(indent="  "))
+
     try:
         # Parse the XML file
         tree = ET.parse(file_path)
@@ -63,9 +72,8 @@ def add_xml_child(file_path: str, parent_tag: str, child_tag: str, child_value: 
                     existing_child.set(
                         'value', f'{existing_child.get("value")}, {child_value}')
 
-                tree.write(file_path, encoding="UTF-8",
-                           xml_declaration=True, method="xml")
-                print("XML file updated successfully.")
+                pretty_write(tree, file_path)
+                print("XML file updated and formatted successfully.")
                 return True
 
         # Create the new child element and set its value
@@ -77,10 +85,9 @@ def add_xml_child(file_path: str, parent_tag: str, child_tag: str, child_value: 
         parent_elem.append(new_child)
         print(f"Added <{child_tag}> to <{parent_tag}>.")
 
-        # Write the updated XML to the file
-        tree.write(file_path, encoding="UTF-8",
-                   xml_declaration=True, method="xml")
-        print("XML file updated successfully.")
+        # Write the updated XML to the file with pretty formatting
+        pretty_write(tree, file_path)
+        print("XML file updated and formatted successfully.")
         return True
 
     except ET.ParseError as e:
@@ -151,7 +158,7 @@ def extract_vtype_distribution(file_path: str) -> dict:
 
 def path_to_xml(path: list[str], vehicle_id: str, veh_type: str, departure_time: int, stop_durations: list[int], no_parking: bool = False) -> str:
     """
-    Converts a path to an XML format that LLAMA understands.
+    Converts a path to an XML format.
     Args:
         path (list): List of edges or parking areas in the trip.
         vehicle_id (str): Unique identifier for the vehicle.
@@ -163,8 +170,6 @@ def path_to_xml(path: list[str], vehicle_id: str, veh_type: str, departure_time:
     Returns:
         xml (str): XML string representing the trip.
     """
-
-    # Converts the path to the XML format that LLAMA understands
     xml = f'<trip id="{vehicle_id}" type="{veh_type}" depart="{departure_time}" from="{path[0]}" to="{path[-1]}">\n'
     for i in range(1, len(path)-1):
         if no_parking:
@@ -176,45 +181,87 @@ def path_to_xml(path: list[str], vehicle_id: str, veh_type: str, departure_time:
     return xml
 
 
-def parse_trip_xml(path: list, stop_durations: list[int], n_trips: int, departure_times: list[int], veh_types_per_student: list[str], out_file_path: str, use_carla_routine: bool = False, veh_ids: list[str] = []):
+def parse_trip_xml(path: list, stop_durations: list[int], n_trips: list[int], veh_types: list[str], departure_times: list[int], out_file_path: str, use_carla_routine: bool = False):
     """
-    Creates the XML for the trips based on the provided parameters.
+    Creates the XML for n_trips for each provided v_type based on the provided parameters.
+
     Args:
         path (list): List of edges or parking areas in the trip.
         stop_durations (list): List of durations for each stop in the trip.
-        n_trips (int): Number of trips.
+        n_trips (list): Number of trips per vehicle type. If None, it will create one trip for each vehicle type.
         departure_times (list): List of departure times for each trip.
-        veh_types_per_student (list): List of vehicle types for each student.
+        veh_types (list): List of vehicle types.
         use_carla_routine (bool): If True, the path is treated as a sequence of edges without parking areas.
-        veh_ids (list): List of vehicle IDs for each trip. If empty, default IDs will be used.
         out_file_path (str): Path to save the generated XML file.
     Returns:
-        bool: True if the XML was created successfully, False otherwise.
+        list: A list of vehicle IDs created in the XML file.
     Raises:
         ValueError: If the number of vehicle IDs does not match the number of trips.
     """
-
-    if veh_ids and len(veh_ids) != n_trips:
-        raise ValueError(
-            "The number of vehicle IDs must match the number of trips.")
+    ids = []
 
     xml = '<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">\n'
     xml += '\n'
     xml += '<!-- Trips -->\n'
-    for i in range(n_trips):
-        if veh_ids:
-            veh_id = veh_ids[i]
-        else:
-            veh_id = f'veh{i + 1}'
+    for i, n in enumerate(n_trips):
+        for j in range(n):
+            v_type = veh_types[i]
+            veh_id = f'veh{j}_{v_type}'
+            ids.append(veh_id)
 
-        # when using the carla routine, there will be no parking, so durations are zero and the vehicle will go through edges
-        xml += path_to_xml(path, veh_id, veh_types_per_student[i], departure_times[i],
-                           stop_durations, no_parking=use_carla_routine) + '\n'
+            # when using the carla routine, there will be no parking, so durations are zero and the vehicle will go through edges
+            xml += path_to_xml(path, veh_id, f'veh_{v_type}', departure_times[i],
+                               stop_durations, no_parking=use_carla_routine) + '\n'
 
     xml += '</routes>'
 
     with open(out_file_path, 'w') as f:
         f.write(xml)
+
+    return ids
+
+
+def add_trip_xml(path: list, stop_durations: list[int], veh_id: int, veh_type: str, departure_time: int, out_file_path: str, use_carla_routine: bool = False):
+    """
+    Creates the XML for n_trips for each provided v_type based on the provided parameters.
+
+    Args:
+        path (list): List of edges or parking areas in the trip.
+        stop_durations (list): List of durations for each stop in the trip.
+        veh_id (int): Unique identifier for the vehicle.
+        veh_type (str): Vehicle type.
+        departure_time (int): Departure time for the trip.
+        use_carla_routine (bool): If True, the path is treated as a sequence of edges without parking areas.
+        out_file_path (str): Path to save the generated XML file.
+    Returns:
+        bool: True if the operation was successful, False otherwise.
+    """
+
+    if not os.path.exists(out_file_path):
+        # If the file does not exist, create the root element
+        xml = '<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">\n'
+        xml += '</routes>'
+        with open(out_file_path, 'w') as f:
+            f.write(xml)
+
+    # when using the carla routine, there will be no parking, so durations are zero and the vehicle will go through edges
+    xml = path_to_xml(path, veh_id, veh_type, departure_time,
+                      stop_durations, no_parking=use_carla_routine) + '\n'
+
+    tree = ET.parse(out_file_path)
+    root = tree.getroot()
+
+    # Parse the new trip XML string to an Element
+    new_trip_elem = ET.fromstring(xml.strip())
+
+    # Find the <routes> parent element (root)
+    routes_elem = root
+
+    # Add the new trip element to <routes>
+    routes_elem.append(new_trip_elem)
+
+    # Write back to file
+    tree.write(out_file_path, encoding='utf-8', xml_declaration=True)
 
     return True
 
@@ -494,3 +541,12 @@ def save_routines_csv(location_time_list: list[dict], veh_ids: list, dir_path: s
         csv_path = f'{dir_path}/{veh_ids[idx]}.csv'
         df.to_csv(csv_path, index_label='Time')
         print(f"Route saved to: {csv_path}")
+
+
+def save_ids_styles_csv(veh_ids: list[str], veh_styles: list[str], output_path: str):
+    with open(output_path, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['id', 'style'])
+        for rid, style in zip(veh_ids, veh_styles):
+            writer.writerow([rid, style])
+    print(f"Saved to {output_path}")

@@ -1,13 +1,13 @@
 <root>
 <vTypeDistribution id="normal">
-	<vType id="v_normal0" carFollowModel="EIDM" laneChangeModel="SL2015" minGap="3.73" accel="3.16" decel="3.16" emergencyDecel="7.16" startupDelay="1.58" tau="3.16" maxSpeed="67.33" speedFactor="0.89" ccoolness="0.67" sigmaleader="0.22" sigmagap="0.22" sigmaerror="0.22" jerkmax="7.89" epsilonacc="0.79" taccmax="3.16" lcStrategic="0.79" lcCooperative="0.92" lcSpeedGain="0.79" lcKeepRight="0.92" lcOvertakeRight="0.12" lcSpeedGainLookahead="3.16" lcOvertakeDeltaSpeedFactor="0.73" lcPushy="0.12" lcAssertive="1.58" lcImpatience="0.12" lcTimeToImpatience="7.89" lcLaneDiscipline="0.92" lcSigma="0.22" lcAccelLat="0.79" probability="1.0">
+	<vType id="veh_normal" carFollowModel="EIDM" laneChangeModel="SL2015" maxSpeed="13.88888888888889" accel="2.5" decel="4.5" speedFactor="1.0" emergencyDecel="9.0" vClass="passenger" probability="1.0">
 		<param key="device.rerouting.probability" value="1.0"/>
 		<param key="device.rerouting.adaptation-steps" value="18"/>
 		<param key="device.rerouting.adaptation-interval" value="10"/>
 	</vType>
 </vTypeDistribution>
 <vTypeDistribution id="aggressive">
-	<vType id="v_aggressive0" carFollowModel="EIDM" laneChangeModel="SL2015" minGap="2.16" accel="5.16" decel="5.16" emergencyDecel="9.16" startupDelay="0.7" tau="2.16" maxSpeed="103.11" speedFactor="0.93" ccoolness="0.37" sigmaleader="0.36" sigmagap="0.36" sigmaerror="0.42" jerkmax="12.89" epsilonacc="1.29" taccmax="1.58" lcStrategic="1.58" lcCooperative="0.37" lcSpeedGain="1.58" lcKeepRight="0.37" lcOvertakeRight="0.67" lcSpeedGainLookahead="1.58" lcOvertakeDeltaSpeedFactor="0.96" lcPushy="0.67" lcAssertive="3.16" lcImpatience="0.67" lcTimeToImpatience="1.58" lcLaneDiscipline="0.37" lcSigma="0.42" lcAccelLat="1.58" probability="1.0">
+	<vType id="veh_aggressive" carFollowModel="EIDM" laneChangeModel="SL2015" maxSpeed="19.444444444444443" accel="3.0" decel="5.0" speedFactor="1.2" emergencyDecel="10.0" vClass="passenger" probability="1.0">
 		<param key="device.rerouting.probability" value="1.0"/>
 		<param key="device.rerouting.adaptation-steps" value="18"/>
 		<param key="device.rerouting.adaptation-interval" value="10"/>
