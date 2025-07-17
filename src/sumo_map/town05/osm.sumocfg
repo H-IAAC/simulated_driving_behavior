@@ -1,26 +1,63 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" ?>
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
+  
 
-    <input>
-        <net-file value="osm.net.xml" />
-        <route-files value="merged.rou.xml" />
-    <additional-files value="debug.add.xml" /></input>
+    
+  <input>
+    
+        
+    <net-file value="osm.net.xml"/>
+    
+        
+    <route-files value="../src/sumo_map/town05/merged_fixed.rou.xml"/>
+    
+    
+    <additional-files value="debug.add.xml"/>
+  </input>
+  
 
-    <gui_only>
-        <gui-settings-file value="viewsettings.xml" />
-    </gui_only>
+    
+  <gui_only>
+    
+        
+    <gui-settings-file value="viewsettings.xml"/>
+    
+    
+  </gui_only>
+  
 
-    <processing>
-        <time-to-teleport value="100" />
-    </processing>
+    
+  <processing>
+    
+        
+    <time-to-teleport value="100"/>
+    
+    
+  </processing>
+  
 
-    <parameters>
-        <lateral-resolution value="0.8" />
-    </parameters>
+    
+  <parameters>
+    
+        
+    <lateral-resolution value="0.8"/>
+    
+    
+  </parameters>
+  
 
-    <time>
-        <step-length value="0.1" />
-        <end value="" />
-    </time>
+    
+  <time>
+    
+        
+    <step-length value="0.1"/>
+    
+        
+    <end value=""/>
+    
+    
+  </time>
+  
+
 
 </configuration>
