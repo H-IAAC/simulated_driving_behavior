@@ -1,12 +1,14 @@
 import os
 import shutil
 import re
+
 from pandas import DataFrame
 import csv
 import carla
 from pandas import DataFrame, read_csv
-
 import xml.etree.ElementTree as ET
+from xml.dom.minidom import parseString
+from xml.etree.ElementTree import tostring
 
 
 def add_xml_child(file_path: str, parent_tag: str, child_tag: str, child_value: str, replace: bool = True) -> bool:
@@ -181,46 +183,6 @@ def path_to_xml(path: list[str], vehicle_id: str, veh_type: str, departure_time:
     return xml
 
 
-def parse_trip_xml(path: list, stop_durations: list[int], n_trips: list[int], veh_types: list[str], departure_times: list[int], out_file_path: str, use_carla_routine: bool = False):
-    """
-    Creates the XML for n_trips for each provided v_type based on the provided parameters.
-
-    Args:
-        path (list): List of edges or parking areas in the trip.
-        stop_durations (list): List of durations for each stop in the trip.
-        n_trips (list): Number of trips per vehicle type. If None, it will create one trip for each vehicle type.
-        departure_times (list): List of departure times for each trip.
-        veh_types (list): List of vehicle types.
-        use_carla_routine (bool): If True, the path is treated as a sequence of edges without parking areas.
-        out_file_path (str): Path to save the generated XML file.
-    Returns:
-        list: A list of vehicle IDs created in the XML file.
-    Raises:
-        ValueError: If the number of vehicle IDs does not match the number of trips.
-    """
-    ids = []
-
-    xml = '<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">\n'
-    xml += '\n'
-    xml += '<!-- Trips -->\n'
-    for i, n in enumerate(n_trips):
-        for j in range(n):
-            v_type = veh_types[i]
-            veh_id = f'veh{j}_{v_type}'
-            ids.append(veh_id)
-
-            # when using the carla routine, there will be no parking, so durations are zero and the vehicle will go through edges
-            xml += path_to_xml(path, veh_id, f'veh_{v_type}', departure_times[i],
-                               stop_durations, no_parking=use_carla_routine) + '\n'
-
-    xml += '</routes>'
-
-    with open(out_file_path, 'w') as f:
-        f.write(xml)
-
-    return ids
-
-
 def add_trip_xml(path: list, stop_durations: list[int], veh_id: int, veh_type: str, departure_time: int, out_file_path: str, use_carla_routine: bool = False):
     """
     Creates the XML for n_trips for each provided v_type based on the provided parameters.
@@ -252,13 +214,8 @@ def add_trip_xml(path: list, stop_durations: list[int], veh_id: int, veh_type: s
     root = tree.getroot()
 
     # Parse the new trip XML string to an Element
-    new_trip_elem = ET.fromstring(xml.strip())
-
-    # Find the <routes> parent element (root)
-    routes_elem = root
-
-    # Add the new trip element to <routes>
-    routes_elem.append(new_trip_elem)
+    new_trip_elem = ET.fromstring(xml)
+    root.append(new_trip_elem)
 
     # Write back to file
     tree.write(out_file_path, encoding='utf-8', xml_declaration=True)
@@ -342,42 +299,44 @@ def parse_veh_fixed_xml(param_dict, styles, output_path, car_follow_model="IDM",
     return xml
 
 
-def merge_routes(routine_routes, random_routes, output_file_path):
-    # Merges two route files into one
+def merge_routes(routine_routes_path, random_routes_path, output_file_path):
 
-    xml = '<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">\n'
+    # Create the root <routes> element
+    routes_root = ET.Element('routes')
+    routes_root.set('xmlns:xsi', "http://www.w3.org/2001/XMLSchema-instance")
+    routes_root.set('xsi:noNamespaceSchemaLocation',
+                    "http://sumo.dlr.de/xsd/routes_file.xsd")
 
-    xml += '\n<!-- BEGIN - LLM Generated trips -->\n'
+    elements = []
+    root_routines = ET.parse(routine_routes_path).getroot()
+    root_random = ET.parse(random_routes_path).getroot()
+    for elem in root_routines:
+        if elem.tag in ('trip', 'vehicle'):
+            elements.append(elem)
+        elif elem.tag == 'vType':
+            routes_root.append(elem)
 
-    with open(routine_routes, 'r') as f:
-        start_read = False
-        for line in f:
-            test = line.strip()
-            if test.startswith('<vType'):
-                start_read = True
-            if start_read:
-                if line.startswith('</routes>'):
-                    break
-                xml += line
+    for elem in root_random:
+        if elem.tag in ('trip', 'vehicle'):
+            elements.append(elem)
+        elif elem.tag == 'vType':
+            # Check if the vType already exists in the routes_root
+            existing_vtype = routes_root.find(
+                f"vType[@id='{elem.get('id')}']")
+            if existing_vtype is None:
+                routes_root.append(elem)
 
-    xml += '<!-- END - LLM Generated trips -->\n\n'
-    xml += '<!-- BEGIN - Random Trips -->\n\n'
+    # Sort the elements by their 'depart' attribute, required by SUMO
+    elements.sort(key=lambda x: float(x.get('depart', 0)))
 
-    with open(random_routes, 'r') as f:
-        start_read = False
-        for line in f:
-            test = line.strip()
-            if not start_read and test.startswith('<vehicle'):
-                start_read = True
-            if start_read:
-                xml += line
+    # Append sorted elements to the routes_root
+    for elem in elements:
+        routes_root.append(elem)
 
-    xml += '<!-- END - Random Trips -->\n\n'
-
-    with open(output_file_path, 'w') as f:
-        f.write(xml)
-
-    return xml
+    with open(output_file_path, "w", encoding="utf-8") as f:
+        pretty = parseString(
+            tostring(routes_root, encoding="utf-8")).toprettyxml(indent="  ")
+        f.write("\n".join(line for line in pretty.splitlines() if line.strip()))
 
 
 def make_output_file(output_file_path, final_trips_file_path=None, random_trips_file_path=None) -> str:

@@ -10,7 +10,7 @@
 		<param key="device.rerouting.adaptation-steps" value="18" />
 		<param key="device.rerouting.adaptation-interval" value="10" />
 	</vType>
-<trip id="veh_0_normal" type="normal" depart="0" from="25.0.00" to="25.0.00">
+<trip id="veh_0_normal" type="veh_normal" depart="0" from="25.0.00" to="25.0.00">
 	<stop edge="-7.0.00" duration="10" />
 	<stop edge="25.0.00" duration="20" />
 	<stop edge="-43.0.00" duration="10" />
@@ -24,7 +24,7 @@
 	<stop edge="51.0.00" duration="10" />
 	<stop edge="25.0.00" duration="10" />
 	<stop edge="-43.0.00" duration="10" />
-</trip><trip id="veh_0_aggressive" type="aggressive" depart="20" from="25.0.00" to="25.0.00">
+</trip><trip id="veh_0_aggressive" type="veh_aggressive" depart="20" from="25.0.00" to="25.0.00">
 	<stop edge="-7.0.00" duration="10" />
 	<stop edge="25.0.00" duration="20" />
 	<stop edge="-43.0.00" duration="10" />

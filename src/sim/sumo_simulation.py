@@ -5,6 +5,7 @@ import os
 import shutil
 
 from . import sumo_helper
+import csv
 
 sumoBinary = "/usr/bin/sumo-gui"
 sumoCmd = [sumoBinary, "-c", "osm.sumocfg"]
@@ -100,14 +101,13 @@ def get_all_variables(folder_path, veh_ids, delta_time=0.05, end_hours=0, use_gu
     return v_variables
 
 
-def save_data(veh_variables, data_folder_path, delta_time, file_names, new_dir=False, verify=True, use_lat_lon=True, speed_threshold=6, acc_threshold=6, derivative_threshold=3):
+def save_data(veh_variables, data_folder_path, delta_time, new_dir=False, verify=True, use_lat_lon=True, speed_threshold=6, acc_threshold=6, derivative_threshold=3):
     """
     Saves the data from the simulation in a folder with the given name.
     Args:
         veh_variables (dict): Dictionary with the variables from the simulation.
-        data_folder_name (str): Name of the folder where the data will be saved.
+        data_folder_path (str): Path of the folder where the data will be saved.
         delta_time (float): Time step of the simulation.
-        file_names (dict): Dict containing {veh_id: filename} for each ID in veh_ids.
         new_dir (bool): If True, creates a new directory for the data.
         verify (bool): If True, verifies the data and corrects outliers.
         use_lat_lon (bool): If True, uses latitude and longitude instead of x and y coordinates.
@@ -133,7 +133,7 @@ def save_data(veh_variables, data_folder_path, delta_time, file_names, new_dir=F
             else:
                 columns = 'timestamp,x_pos,y_pos,speed,speed_x,speed_y,acc,acc_x,acc_y,angle,acc_diff,gyro_z'
 
-            nolabel_path = f'{data_folder_path}/{file_names[veh_id]}.csv'
+            nolabel_path = f'{data_folder_path}/{veh_id}.csv'
 
             if not os.path.exists(nolabel_path):
                 with open(nolabel_path, 'w') as f:
@@ -221,3 +221,25 @@ def save_data(veh_variables, data_folder_path, delta_time, file_names, new_dir=F
 
             with open(nolabel_path, 'a') as f:
                 f.write(f'{line}\n')
+
+    print(
+        f"Data saved in {data_folder_path} with delta time {delta_time} seconds.")
+
+    # Save metadata to a CSV file
+    metadata = {
+        "delta_time": delta_time,
+        "verify": verify,
+        "use_lat_lon": use_lat_lon,
+        "speed_threshold": speed_threshold,
+        "acc_threshold": acc_threshold,
+        "derivative_threshold": derivative_threshold,
+        "vehicle_ids": list(veh_variables[list(veh_variables.keys())[0]].keys()) if veh_variables else [],
+        "timesteps": len(veh_variables),
+    }
+
+    metadata_path = os.path.join(data_folder_path, "metadata.csv")
+    with open(metadata_path, "w", newline="") as csvfile:
+        writer = csv.writer(csvfile)
+        for key, value in metadata.items():
+            writer.writerow([key, value])
+    print(f"Metadata saved in {metadata_path}")
