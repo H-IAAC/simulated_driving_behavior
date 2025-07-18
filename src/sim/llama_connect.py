@@ -261,8 +261,10 @@ def verify_parameters(parameters_dict: dict, styles: list, separate_distribution
                 if param.endswith('Factor'):
                     # Factors should be between 0.1 and 0.9
                     print(f"Verifying {param} for {styles[i]}: {values}")
-                    if float(values['min']) < 0.1:
+                    if float(values['min']) < 0.1 or float(values['min']) > 0.9:
                         values['min'] = 0.1
+                        values['max'] = 0.9
+
                     if float(values['max']) > 0.9:
                         values['max'] = 0.9
 

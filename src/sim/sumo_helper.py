@@ -33,8 +33,12 @@ def add_xml_child(file_path: str, parent_tag: str, child_tag: str, child_value: 
         # Convert ElementTree to string, then pretty print and write
         rough_string = ET.tostring(tree.getroot(), encoding='utf-8')
         reparsed = xml.dom.minidom.parseString(rough_string)
+        pretty_xml = reparsed.toprettyxml(indent="  ")
+        # Remove blank lines
+        pretty_xml = "\n".join(
+            [line for line in pretty_xml.splitlines() if line.strip()])
         with open(file_path, "w", encoding="utf-8") as f:
-            f.write(reparsed.toprettyxml(indent="  "))
+            f.write(pretty_xml)
 
     try:
         # Parse the XML file

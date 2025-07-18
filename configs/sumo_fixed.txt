@@ -1,0 +1,26 @@
+{
+    'maxSpeed': {
+        'normal': 50 / 3.6, # m/s
+        'aggressive': 70 / 3.6,
+    },
+    'accel': { # Default value for SUMO passenger car is 2.6
+        'normal': 2.5,
+        'aggressive': 3.0,
+    },
+    'decel': { # Default value for SUMO is 4.5
+        'normal': 4.5,
+        'aggressive': 5.0,
+    },
+    'speedFactor': { # Slightly higher for aggressive drivers
+        'normal': 1.0,
+        'aggressive': 1.2,
+    },
+    'emergencyDecel': {
+        'normal': 9.0,
+        'aggressive': 10.0,
+    },
+    'vClass': {
+        'normal': 'passenger',
+        'aggressive': 'passenger',
+    }
+}

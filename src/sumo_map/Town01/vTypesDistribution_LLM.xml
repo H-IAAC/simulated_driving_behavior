@@ -1,0 +1,26 @@
+<root>
+<vTypeDistribution id="normal">
+	<vType id="veh_normal0" carFollowModel="EIDM" laneChangeModel="SL2015" minGap="2.08" accel="1.08" decel="1.08" emergencyDecel="2.58" startupDelay="1.08" tau="1.58" maxSpeed="25.78" speedFactor="0.68" ccoolness="0.57" sigmaleader="0.22" sigmagap="0.22" sigmaerror="0.11" jerkmax="1.58" epsilonacc="0.33" taccmax="1.58" lcStrategic="1.08" lcCooperative="0.82" lcSpeedGain="1.08" lcKeepRight="1.08" lcOvertakeRight="0.22" lcSpeedGainLookahead="1.58" lcOvertakeDeltaSpeedFactor="0.57" lcPushy="0.22" lcAssertive="1.58" lcImpatience="0.12" lcTimeToImpatience="15.78" lcLaneDiscipline="1.58" lcSigma="0.22" lcAccelLat="1.08" probability="0.5">
+		<param key="device.rerouting.probability" value="1.0"/>
+		<param key="device.rerouting.adaptation-steps" value="18"/>
+		<param key="device.rerouting.adaptation-interval" value="10"/>
+	</vType>
+	<vType id="veh_normal1" carFollowModel="EIDM" laneChangeModel="SL2015" minGap="2.08" accel="1.08" decel="1.08" emergencyDecel="2.58" startupDelay="1.08" tau="1.58" maxSpeed="25.78" speedFactor="0.68" ccoolness="0.57" sigmaleader="0.22" sigmagap="0.22" sigmaerror="0.11" jerkmax="1.58" epsilonacc="0.33" taccmax="1.58" lcStrategic="1.08" lcCooperative="0.82" lcSpeedGain="1.08" lcKeepRight="1.08" lcOvertakeRight="0.22" lcSpeedGainLookahead="1.58" lcOvertakeDeltaSpeedFactor="0.57" lcPushy="0.22" lcAssertive="1.58" lcImpatience="0.12" lcTimeToImpatience="15.78" lcLaneDiscipline="1.58" lcSigma="0.22" lcAccelLat="1.08" probability="0.5">
+		<param key="device.rerouting.probability" value="1.0"/>
+		<param key="device.rerouting.adaptation-steps" value="18"/>
+		<param key="device.rerouting.adaptation-interval" value="10"/>
+	</vType>
+</vTypeDistribution>
+<vTypeDistribution id="aggressive">
+	<vType id="veh_aggressive0" carFollowModel="EIDM" laneChangeModel="SL2015" minGap="1.08" accel="2.66" decel="2.66" emergencyDecel="4.16" startupDelay="0.82" tau="1.08" maxSpeed="41.55" speedFactor="0.82" ccoolness="0.82" sigmaleader="0.47" sigmagap="0.47" sigmaerror="0.24" jerkmax="3.16" epsilonacc="1.08" taccmax="1.08" lcStrategic="2.66" lcCooperative="0.37" lcSpeedGain="2.66" lcKeepRight="0.55" lcOvertakeRight="0.77" lcSpeedGainLookahead="1.08" lcOvertakeDeltaSpeedFactor="0.82" lcPushy="0.77" lcAssertive="3.16" lcImpatience="0.92" lcTimeToImpatience="3.73" lcLaneDiscipline="1.08" lcSigma="0.47" lcAccelLat="2.66" probability="0.5">
+		<param key="device.rerouting.probability" value="1.0"/>
+		<param key="device.rerouting.adaptation-steps" value="18"/>
+		<param key="device.rerouting.adaptation-interval" value="10"/>
+	</vType>
+	<vType id="veh_aggressive1" carFollowModel="EIDM" laneChangeModel="SL2015" minGap="1.08" accel="2.66" decel="2.66" emergencyDecel="4.16" startupDelay="0.82" tau="1.08" maxSpeed="41.55" speedFactor="0.82" ccoolness="0.82" sigmaleader="0.47" sigmagap="0.47" sigmaerror="0.24" jerkmax="3.16" epsilonacc="1.08" taccmax="1.08" lcStrategic="2.66" lcCooperative="0.37" lcSpeedGain="2.66" lcKeepRight="0.55" lcOvertakeRight="0.77" lcSpeedGainLookahead="1.08" lcOvertakeDeltaSpeedFactor="0.82" lcPushy="0.77" lcAssertive="3.16" lcImpatience="0.92" lcTimeToImpatience="3.73" lcLaneDiscipline="1.08" lcSigma="0.47" lcAccelLat="2.66" probability="0.5">
+		<param key="device.rerouting.probability" value="1.0"/>
+		<param key="device.rerouting.adaptation-steps" value="18"/>
+		<param key="device.rerouting.adaptation-interval" value="10"/>
+	</vType>
+</vTypeDistribution>
+</root>
