@@ -1,9 +1,11 @@
 import os
 import json
 
+import pandas as pd
 from groq import Groq
 from tqdm import tqdm
 from pandas import DataFrame
+from typing import List
 
 client = Groq(
     # Initialize the Groq client with the API key from environment variables
@@ -36,7 +38,27 @@ def get_response(message: str) -> str:
     return chat_completion.choices[0].message.content
 
 
-def get_response_trip(student_info: str, places: dict) -> str:
+def get_trip_carla(places):
+    instructions_content = ("Plan the information of a person.")
+    message = [
+        {
+            "role": "system",
+            "content": "You need to plan the routine of a person who has access to the following places: {places}. This person goes to a lot of places during the day and never stays more than an hour anywhere. Be creative and consider this person does not like to stay to much time at the same place. Maybe they go to the gym in the morning and in the evening, they have to take their kids to and from school, go to the bar and to the movies at night, for example. This person always gets home very late. Your response should be in a JSON format showing only the current location and current activity. Never include locations to activities. Always start the day at time 7 at home and end the day at time 23 at home, update every hour. Locations always have a single place, never two. Follow the example where the first number is the time: {{'7': {{'location':'home', 'activity':'wake up'}}, '8': {{'location':'school', 'activity':'study'}}, '9':{{'location':'cafe', 'activity':'breakfast".format(
+                places=", ".join(places),
+            )
+        },
+        {
+            "role": "user",
+            "content": instructions_content,
+        }
+    ]
+    chat_completion = client.chat.completions.create(
+        messages=message, model="llama3-8b-8192", temperature=1, response_format={"type": "json_object"})
+
+    return chat_completion.choices[0].message.content
+
+
+def get_trip_sumo(student_info: str, places: dict) -> str:
     """ Generates a response for a student's daily routine trip using the LLAMA model.
     Args:
         student_info (str): Information about the student, such as their field of study.
@@ -77,11 +99,11 @@ def get_response_trip(student_info: str, places: dict) -> str:
     return chat_completion.choices[0].message.content
 
 
-def response_check(response: str, total_locations: list) -> bool:
+def response_check(response: str, possible_locations: list) -> bool:
     """ Checks if the response from the LLM makes sense.
     Args:
         response (str): The response from the LLM in JSON format.
-        total_locations (list): A list of valid locations that the LLM can generate.
+        possible_locations (list): A list of valid locations that the LLM can generate.
     Returns:
         bool: True if the response is valid, False otherwise.
     """
@@ -98,7 +120,7 @@ def response_check(response: str, total_locations: list) -> bool:
     for item in response:
         try:
             local = response[item]['location']
-            if local not in total_locations or ',' in local:
+            if local not in possible_locations or ',' in local:
                 print(f"Error: Invalid location generated '{local}'")
                 return False
 
@@ -109,7 +131,7 @@ def response_check(response: str, total_locations: list) -> bool:
     return True
 
 
-def generate_response_trips(student_info: str, places: dict, number_of_trips: int = 5) -> list[str]:
+def generate_response_trips(student_info: str, places: dict, number_of_trips: int = 5) -> List[str]:
     """ Generates and verifies a list of responses for the student's daily routine trips using the LLAMA model.
     Args:
         student_info (str): Information about the student, such as their field of study.
@@ -127,7 +149,7 @@ def generate_response_trips(student_info: str, places: dict, number_of_trips: in
     with tqdm(total=number_of_trips) as pbar:
         while i < number_of_trips:
             try:
-                response = get_response_trip(student_info, places)
+                response = get_trip_sumo(student_info, places)
 
                 if response_check(response, total_locations):
                     responses.append(response)
@@ -142,7 +164,7 @@ def generate_response_trips(student_info: str, places: dict, number_of_trips: in
     return responses
 
 
-def generate_range_parameters(parameters: str, styles: list[str]) -> str:
+def generate_range_parameters(parameters: str, styles: List[str]) -> str:
     """ Generates the range of parameters for the vehicle types using the LLAMA model.
     Args:
         parameters (str): A string containing the parameters to be used in the generation.
@@ -174,7 +196,7 @@ def generate_range_parameters(parameters: str, styles: list[str]) -> str:
     return chat_completion.choices[0].message.content
 
 
-def get_range_parameters(data: DataFrame, params: str, styles: list[str]) -> dict:
+def get_range_parameters(data: DataFrame, params: str, styles: List[str]) -> dict:
     """ Generates the range of parameters for the vehicles using the LLAMA model.
     Args:
         data (pd.DataFrame): A DataFrame containing the parameters to be used in the generation.
@@ -278,3 +300,32 @@ def verify_parameters(parameters_dict: dict, styles: list, separate_distribution
         parameters_dict['speedFactor'][f'{style}']['min'] = max_speedfactor - 0.1
 
     print("Verification complete!")
+
+
+def save_response(response, generated_routines, routines_folder):
+    if isinstance(response, str):
+        response = json.loads(response)
+    df = pd.DataFrame(response).T
+    df.index.name = 'time'
+    os.makedirs(routines_folder, exist_ok=True)
+    df.to_csv(f'{routines_folder}/llm_routine_{generated_routines}.csv')
+
+
+def generate_routines(places, n_of_routines, routines_folder):
+    generated_routines = 0
+    while (generated_routines < n_of_routines):
+        try:
+            response = get_trip_carla(places)
+            # Getting a valid response from the LLM
+            while not response_check(response, places):
+                response = json.loads(get_trip_carla(places))
+
+            # Save the response to a CSV file
+            save_response(response, generated_routines,
+                          routines_folder=routines_folder)
+            print(response)
+            generated_routines += 1
+
+        except Exception as e:
+            print(f"Error generating routine. Trying again. Error: {e}")
+            continue
