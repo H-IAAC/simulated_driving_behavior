@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import numpy as np
+from itertools import product
 
 
 def get_data(directory, driver, specifier, sensor):
@@ -24,6 +25,7 @@ def get_data(directory, driver, specifier, sensor):
                 data = data.drop(['system_active'], axis=1)
                 data['acc'] = np.sqrt(
                     data['acc_x']**2 + data['acc_y']**2 + data['acc_z']**2)
+
                 return data
 
     elif sensor == 'gps':
@@ -40,63 +42,66 @@ def get_data(directory, driver, specifier, sensor):
                     'course',
                     'difcourse',
                 ], usecols=range(9))
+
                 return data
 
 
-def read_accelerometer(drivers, directory):
-    normal = pd.DataFrame()
-    aggressive = pd.DataFrame()
-    drowsy = pd.DataFrame()
-    for driver in drivers:
-        normal = pd.concat(
-            [normal, get_data(directory, driver, 'NORMAL1-SECONDARY', sensor='acc')], axis=0)
-        normal = pd.concat(
-            [normal, get_data(directory, driver, 'NORMAL2-SECONDARY', sensor='acc')], axis=0)
-        normal = pd.concat(
-            [normal, get_data(directory, driver, 'NORMAL-MOTORWAY', sensor='acc')], axis=0)
-        aggressive = pd.concat([aggressive, get_data(
-            directory, driver, 'AGGRESSIVE-SECONDARY', sensor='acc')], axis=0)
-        aggressive = pd.concat([aggressive, get_data(
-            directory, driver, 'AGGRESSIVE-MOTORWAY', sensor='acc')], axis=0)
-        drowsy = pd.concat(
-            [drowsy, get_data(directory, driver, 'DROWSY-SECONDARY', sensor='acc')], axis=0)
-        drowsy = pd.concat(
-            [drowsy, get_data(directory, driver, 'DROWSY-MOTORWAY', sensor='acc')], axis=0)
-
-    df_accelerometer = {}
-    df_accelerometer['normal'] = normal
-    df_accelerometer['aggressive'] = aggressive
-    df_accelerometer['drowsy'] = drowsy
-
-    return df_accelerometer
+def load_and_correct(existing_df, new_df):
+    if existing_df.empty:
+        return new_df
+    last_ts = existing_df['timestamp'].iloc[-1]
+    new_df = new_df.copy()
+    new_df['timestamp'] += last_ts
+    return pd.concat([existing_df, new_df], axis=0)
 
 
-def read_gps(drivers, directory):
-    normal = pd.DataFrame()
-    aggressive = pd.DataFrame()
-    drowsy = pd.DataFrame()
-    for driver in drivers:
-        normal = pd.concat(
-            [normal, get_data(directory, driver, 'NORMAL1-SECONDARY', sensor='gps')], axis=0)
-        normal = pd.concat(
-            [normal, get_data(directory, driver, 'NORMAL2-SECONDARY', sensor='gps')], axis=0)
-        normal = pd.concat(
-            [normal, get_data(directory, driver, 'NORMAL-MOTORWAY', sensor='gps')], axis=0)
-        aggressive = pd.concat([aggressive, get_data(
-            directory, driver, 'AGGRESSIVE-SECONDARY', sensor='gps')], axis=0)
-        aggressive = pd.concat([aggressive, get_data(
-            directory, driver, 'AGGRESSIVE-MOTORWAY', sensor='gps')], axis=0)
-        drowsy = pd.concat(
-            [drowsy, get_data(directory, driver, 'DROWSY-SECONDARY', sensor='gps')], axis=0)
-        drowsy = pd.concat(
-            [drowsy, get_data(directory, driver, 'DROWSY-MOTORWAY', sensor='gps')], axis=0)
+def read_data(drivers, directory):
 
-    df_gps = {}
-    df_gps['normal'] = normal
-    df_gps['aggressive'] = aggressive
-    df_gps['drowsy'] = drowsy
+    # Function to load and correct timestamps in order to keep them continuous
+    for sensor in ['acc', 'gps']:
+        normal = pd.DataFrame()
+        aggressive = pd.DataFrame()
 
-    return df_gps
+        for driver in drivers:
+            # Normal driving segments
+            for segment in ['NORMAL1-SECONDARY', 'NORMAL2-SECONDARY', 'NORMAL-MOTORWAY']:
+                new_data = get_data(directory, driver, segment, sensor=sensor)
+                normal = load_and_correct(normal, new_data)
+
+            # Aggressive driving segments
+            for segment in ['AGGRESSIVE-SECONDARY', 'AGGRESSIVE-MOTORWAY']:
+                new_data = get_data(directory, driver, segment, sensor=sensor)
+                aggressive = load_and_correct(aggressive, new_data)
+
+        if sensor == 'acc':
+            df_acc = {'normal': normal, 'aggressive': aggressive}
+        else:
+            df_gps = {'normal': normal, 'aggressive': aggressive}
+
+    return {'acc': df_acc, 'gps': df_gps}
+
+
+# def read_gps(drivers, directory):
+#     normal = pd.DataFrame()
+#     aggressive = pd.DataFrame()
+
+#     for driver in drivers:
+#         normal = pd.concat(
+#             [normal, get_data(directory, driver, 'NORMAL1-SECONDARY', sensor='gps')], axis=0)
+#         normal = pd.concat(
+#             [normal, get_data(directory, driver, 'NORMAL2-SECONDARY', sensor='gps')], axis=0)
+#         normal = pd.concat(
+#             [normal, get_data(directory, driver, 'NORMAL-MOTORWAY', sensor='gps')], axis=0)
+#         aggressive = pd.concat([aggressive, get_data(
+#             directory, driver, 'AGGRESSIVE-SECONDARY', sensor='gps')], axis=0)
+#         aggressive = pd.concat([aggressive, get_data(
+#             directory, driver, 'AGGRESSIVE-MOTORWAY', sensor='gps')], axis=0)
+
+#     df_gps = {}
+#     df_gps['normal'] = normal
+#     df_gps['aggressive'] = aggressive
+
+#     return df_gps
 
 
 def get_samples_per_second(df_acc):
@@ -104,11 +109,21 @@ def get_samples_per_second(df_acc):
     # Assuming the timestamp is in seconds and the data is sorted by timestamp
     samples_per_second = df_acc['normal'].iloc[1]['timestamp'] - \
         df_acc['normal'].iloc[0]['timestamp']
+    df_acc['normal'].iloc[0]['timestamp']
     samples_per_second = 1 / samples_per_second
     return samples_per_second
 
 
 def load_synthetic_data(town_data_directory):
+    """Load synthetic data from the specified town data directory.
+
+    Args:
+        town_data_directory (str): Path to the directory containing the town data.
+
+    Returns:
+        tuple: Two dictionaries containing CARLA and SUMO data for fixed and LLM modes with traffic conditions.
+    """
+
     carla_path = os.path.join(town_data_directory, 'carla')
     sumo_path = os.path.join(town_data_directory, 'sumo')
 
@@ -128,5 +143,39 @@ def load_synthetic_data(town_data_directory):
     sumo_data['llm']['no_traffic'] = {}
     sumo_data['llm']['traffic'] = {}
 
-    for file in os.listdir(os.path.join(sumo_path, 'fixed')):
-        sumo_data['fixed']['normal']
+    for sim, mode, traffic in product(['carla', 'sumo'], ['fixed', 'llm'], ['no_traffic', 'traffic']):
+
+        if sim == 'carla':
+            path = os.path.join(carla_path, mode, traffic)
+        else:
+            path = os.path.join(sumo_path, mode, traffic)
+
+        if os.path.exists(path):
+            files = os.listdir(path)
+
+            for beh in ['normal', 'aggressive']:
+                for file in files:
+                    if file.endswith(f'{beh}.csv'):
+                        csv = pd.read_csv(
+                            os.path.join(path, file), sep=',', header=0)
+
+                        if sim == 'carla':
+                            # If the behavior already exists, concatenate the data
+                            if beh in carla_data[mode][traffic]:
+                                carla_data[mode][traffic][beh] = pd.concat(
+                                    [carla_data[mode][traffic][beh], csv], axis=0, ignore_index=True)
+                            else:
+                                carla_data[mode][traffic][beh] = csv
+
+                        else:
+                            # If the behavior already exists, concatenate the data
+                            if beh in sumo_data[mode][traffic]:
+                                sumo_data[mode][traffic][beh] = pd.concat(
+                                    [sumo_data[mode][traffic][beh], csv], axis=0, ignore_index=True)
+                            else:
+                                sumo_data[mode][traffic][beh] = csv
+
+        else:
+            print(f"Path {path} does not exist. Skipping...")
+
+    return carla_data, sumo_data
