@@ -342,7 +342,7 @@ def set_up_sensors(client, sensors_bp, vehicle):
     return sensor_actors
 
 
-def goal_reached(vehicle, end_location, threshold=1.0):
+def goal_reached(vehicle, end_location, threshold=5):
     """Check if the vehicle has reached the goal location within a threshold.
 
     Args:
@@ -474,6 +474,8 @@ def run_simulation(client, sim_params, sps_routines, output_folder):
     agent_params = sim_params['agent_params']
     for beh in agent_params.keys():
         for i, sps in enumerate(sps_routines):
+            print(
+                f"\n------------------ ROUTINE {i} - BEHAVIOR: {beh} ---------------------------\n")
             try:
                 # timestamp: simulation time - s
                 # acc: m/s^2
