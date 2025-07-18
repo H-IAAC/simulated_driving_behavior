@@ -1,0 +1,8 @@
+delta_time,0.1
+verify,True
+use_lat_lon,False
+speed_threshold,6
+acc_threshold,6
+derivative_threshold,3
+vehicle_ids,[]
+timesteps,10366
