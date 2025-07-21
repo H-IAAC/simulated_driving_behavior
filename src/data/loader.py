@@ -81,29 +81,6 @@ def read_data(drivers, directory):
     return {'acc': df_acc, 'gps': df_gps}
 
 
-# def read_gps(drivers, directory):
-#     normal = pd.DataFrame()
-#     aggressive = pd.DataFrame()
-
-#     for driver in drivers:
-#         normal = pd.concat(
-#             [normal, get_data(directory, driver, 'NORMAL1-SECONDARY', sensor='gps')], axis=0)
-#         normal = pd.concat(
-#             [normal, get_data(directory, driver, 'NORMAL2-SECONDARY', sensor='gps')], axis=0)
-#         normal = pd.concat(
-#             [normal, get_data(directory, driver, 'NORMAL-MOTORWAY', sensor='gps')], axis=0)
-#         aggressive = pd.concat([aggressive, get_data(
-#             directory, driver, 'AGGRESSIVE-SECONDARY', sensor='gps')], axis=0)
-#         aggressive = pd.concat([aggressive, get_data(
-#             directory, driver, 'AGGRESSIVE-MOTORWAY', sensor='gps')], axis=0)
-
-#     df_gps = {}
-#     df_gps['normal'] = normal
-#     df_gps['aggressive'] = aggressive
-
-#     return df_gps
-
-
 def get_samples_per_second(df_acc):
     """Calculate the samples per second from the accelerometer data."""
     # Assuming the timestamp is in seconds and the data is sorted by timestamp

@@ -1,0 +1,350 @@
+{
+  "minGap": {
+    "normal": {
+      "explanation": "normal drivers keep a safe distance",
+      "min": 1.5,
+      "max": 3.0
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are close to the vehicle ahead",
+      "min": 0.5,
+      "max": 1.5
+    }
+  },
+  "accel": {
+    "normal": {
+      "explanation": "normal drivers accelerate gradually",
+      "min": 1.2,
+      "max": 2.5
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers accelerate quickly",
+      "min": 2.5,
+      "max": 4.0
+    }
+  },
+  "decel": {
+    "normal": {
+      "explanation": "normal drivers decelerate smoothly",
+      "min": 1.0,
+      "max": 2.0
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers decelerate quickly",
+      "min": 2.0,
+      "max": 3.5
+    }
+  },
+  "emergencyDecel": {
+    "normal": {
+      "explanation": "normal drivers decelerate quickly in emergency situations",
+      "min": 3.5,
+      "max": 5.0
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers decelerate very quickly in emergency situations",
+      "min": 5.0,
+      "max": 7.0
+    }
+  },
+  "startupDelay": {
+    "normal": {
+      "explanation": "normal drivers wait a bit before starting to drive",
+      "min": 0.5,
+      "max": 1.5
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers start driving quickly after stopping",
+      "min": 0.3,
+      "max": 0.5
+    }
+  },
+  "tau": {
+    "normal": {
+      "explanation": "normal drivers keep a safe distance",
+      "min": 1.5,
+      "max": 3.0
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are close to the vehicle ahead",
+      "min": 0.5,
+      "max": 1.5
+    }
+  },
+  "maxSpeed": {
+    "normal": {
+      "explanation": "normal drivers follow speed limits",
+      "min": 30,
+      "max": 60
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers exceed speed limits",
+      "min": 60,
+      "max": 90
+    }
+  },
+  "speedFactor": {
+    "normal": {
+      "explanation": "normal drivers follow speed limits",
+      "min": 0.7333333333333334,
+      "max": 0.9333333333333333
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers exceed speed limits",
+      "min": 0.7888888888888889,
+      "max": 0.9888888888888888
+    }
+  },
+  "ccoolness": {
+    "normal": {
+      "explanation": "normal drivers are not too cool",
+      "min": 0.3,
+      "max": 0.6
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are very cool",
+      "min": 0.7,
+      "max": 0.9
+    }
+  },
+  "sigmaleader": {
+    "normal": {
+      "explanation": "normal drivers are not too uncertain about the leader's speed",
+      "min": 0.2,
+      "max": 0.5
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are very uncertain about the leader's speed",
+      "min": 0.5,
+      "max": 0.8
+    }
+  },
+  "sigmagap": {
+    "normal": {
+      "explanation": "normal drivers are not too uncertain about the gap",
+      "min": 0.2,
+      "max": 0.5
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are very uncertain about the gap",
+      "min": 0.5,
+      "max": 0.8
+    }
+  },
+  "sigmaerror": {
+    "normal": {
+      "explanation": "normal drivers make some driving errors",
+      "min": 0.1,
+      "max": 0.3
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers make more driving errors",
+      "min": 0.3,
+      "max": 0.5
+    }
+  },
+  "jerkmax": {
+    "normal": {
+      "explanation": "normal drivers accelerate and decelerate smoothly",
+      "min": 2.0,
+      "max": 4.0
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers accelerate and decelerate quickly",
+      "min": 4.0,
+      "max": 6.0
+    }
+  },
+  "epsilonacc": {
+    "normal": {
+      "explanation": "normal drivers adjust acceleration gradually",
+      "min": 0.5,
+      "max": 1.0
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers adjust acceleration quickly",
+      "min": 1.0,
+      "max": 1.5
+    }
+  },
+  "taccmax": {
+    "normal": {
+      "explanation": "normal drivers take time to reach maximum acceleration",
+      "min": 2.0,
+      "max": 4.0
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers reach maximum acceleration quickly",
+      "min": 1.0,
+      "max": 2.0
+    }
+  },
+  "lcStrategic": {
+    "normal": {
+      "explanation": "normal drivers are strategic in lane changes",
+      "min": 0.5,
+      "max": 1.0
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are not strategic in lane changes",
+      "min": 0.1,
+      "max": 0.5
+    }
+  },
+  "lcCooperative": {
+    "normal": {
+      "explanation": "normal drivers are cooperative in lane changes",
+      "min": 0.8,
+      "max": 1.0
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are not cooperative in lane changes",
+      "min": 0.2,
+      "max": 0.5
+    }
+  },
+  "lcSpeedGain": {
+    "normal": {
+      "explanation": "normal drivers gain speed gradually",
+      "min": 0.5,
+      "max": 1.0
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers gain speed quickly",
+      "min": 1.0,
+      "max": 1.5
+    }
+  },
+  "lcKeepRight": {
+    "normal": {
+      "explanation": "normal drivers keep to the right",
+      "min": 0.8,
+      "max": 1.0
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers do not keep to the right",
+      "min": 0.2,
+      "max": 0.5
+    }
+  },
+  "lcOvertakeRight": {
+    "normal": {
+      "explanation": "normal drivers do not overtake on the right",
+      "min": 0.1,
+      "max": 0.3
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers overtake on the right",
+      "min": 0.5,
+      "max": 0.7
+    }
+  },
+  "lcSpeedGainLookahead": {
+    "normal": {
+      "explanation": "normal drivers look ahead for slow traffic",
+      "min": 2.0,
+      "max": 4.0
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers do not look ahead for slow traffic",
+      "min": 1.0,
+      "max": 2.0
+    }
+  },
+  "lcOvertakeDeltaSpeedFactor": {
+    "normal": {
+      "explanation": "normal drivers do not overtake with a large speed difference",
+      "min": 0.5,
+      "max": 0.8
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers overtake with a large speed difference",
+      "min": 0.8,
+      "max": 0.9
+    }
+  },
+  "lcPushy": {
+    "normal": {
+      "explanation": "normal drivers do not encroach on other drivers",
+      "min": 0.1,
+      "max": 0.3
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers encroach on other drivers",
+      "min": 0.5,
+      "max": 0.7
+    }
+  },
+  "lcAssertive": {
+    "normal": {
+      "explanation": "normal drivers assertively take their lane",
+      "min": 1.0,
+      "max": 2.0
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are very assertive in taking their lane",
+      "min": 2.0,
+      "max": 4.0
+    }
+  },
+  "lcImpatience": {
+    "normal": {
+      "explanation": "normal drivers are patient",
+      "min": 0.5,
+      "max": 0.8
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are impatient",
+      "min": 0.8,
+      "max": 1.0
+    }
+  },
+  "lcTimeToImpatience": {
+    "normal": {
+      "explanation": "normal drivers take time to become impatient",
+      "min": 5.0,
+      "max": 10.0
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers become impatient quickly",
+      "min": 2.0,
+      "max": 5.0
+    }
+  },
+  "lcLaneDiscipline": {
+    "normal": {
+      "explanation": "normal drivers follow lane discipline",
+      "min": 0.8,
+      "max": 1.0
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers do not follow lane discipline",
+      "min": 0.2,
+      "max": 0.5
+    }
+  },
+  "lcSigma": {
+    "normal": {
+      "explanation": "normal drivers have good lateral positioning",
+      "min": 0.2,
+      "max": 0.5
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers have poor lateral positioning",
+      "min": 0.5,
+      "max": 0.8
+    }
+  },
+  "lcAccelLat": {
+    "normal": {
+      "explanation": "normal drivers accelerate smoothly laterally",
+      "min": 0.5,
+      "max": 1.0
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers accelerate quickly laterally",
+      "min": 1.0,
+      "max": 1.5
+    }
+  }
+}

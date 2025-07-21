@@ -1,0 +1,98 @@
+{
+  "distance_to_leading_vehicle": {
+    "normal": {
+      "explanation": "normal drivers maintain a safe distance",
+      "min": 5,
+      "max": 10
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are closer to the vehicle in front",
+      "min": 2,
+      "max": 5
+    }
+  },
+  "ignore_lights_percentage": {
+    "normal": {
+      "explanation": "normal drivers follow traffic lights",
+      "min": 0,
+      "max": 5
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers ignore traffic lights",
+      "min": 20,
+      "max": 50
+    }
+  },
+  "ignore_signs_percentage": {
+    "normal": {
+      "explanation": "normal drivers follow stop signs",
+      "min": 0,
+      "max": 5
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers ignore stop signs",
+      "min": 30,
+      "max": 60
+    }
+  },
+  "ignore_vehicles_percentage": {
+    "normal": {
+      "explanation": "normal drivers avoid collisions",
+      "min": 0,
+      "max": 5
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are less likely to avoid collisions",
+      "min": 10,
+      "max": 30
+    }
+  },
+  "keep_slow_lane_rule_percentage": {
+    "normal": {
+      "explanation": "normal drivers stay in the slow lane",
+      "min": 50,
+      "max": 80
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are less likely to stay in the slow lane",
+      "min": 10,
+      "max": 30
+    }
+  },
+  "random_left_lanechange_percentage": {
+    "normal": {
+      "explanation": "normal drivers rarely change lanes",
+      "min": 5,
+      "max": 15
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are more likely to change lanes",
+      "min": 40,
+      "max": 60
+    }
+  },
+  "random_right_lanechange_percentage": {
+    "normal": {
+      "explanation": "normal drivers rarely change lanes",
+      "min": 5,
+      "max": 15
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are more likely to change lanes",
+      "min": 40,
+      "max": 60
+    }
+  },
+  "vehicle_percentage_speed_difference": {
+    "normal": {
+      "explanation": "normal drivers maintain a safe speed",
+      "min": 0,
+      "max": 10
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers speed up",
+      "min": -20,
+      "max": -5
+    }
+  }
+}

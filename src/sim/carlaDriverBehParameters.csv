@@ -1,0 +1,9 @@
+Parameter,Default,Range,Description
+distance_to_leading_vehicle,2.5,>= 0,Minimum distance in meters to the vehicle in front (front-to-back).
+ignore_lights_percentage,0,[0-100],Percentage chance of ignoring traffic lights.
+ignore_signs_percentage,0,[0-100],Percentage chance of ignoring stop signs.
+ignore_vehicles_percentage,0,[0-100],Percentage chance of ignoring collisions with other vehicles.
+keep_slow_lane_rule_percentage,0,[0-100],Chance of vehicle staying in slow lane. Aggressive vehicles are less likely to stay in the slow lane.
+random_left_lanechange_percentage,0,[0-100],Probability per timestep that the vehicle will attempt a left lane change. Aggressive vehicles are more likely to change lanes.
+random_right_lanechange_percentage,0,[0-100],Probability per timestep that the vehicle will attempt a right lane change. Aggressive vehicles are more likely to change lanes.
+vehicle_percentage_speed_difference,30,any float,Difference (%) between vehicle target and current speed limit. Aggressive vehicles tend to have negative values and normal vehicles tend to have positive values.

@@ -2,6 +2,9 @@ import os
 import json
 
 import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy import stats
 from groq import Groq
 from tqdm import tqdm
 from pandas import DataFrame
@@ -331,3 +334,66 @@ def generate_routines(places, n_of_routines, routines_folder):
         except Exception as e:
             print(f"Error generating routine. Trying again. Error: {e}")
             continue
+
+
+def csv_str(data: DataFrame) -> str:
+    """ Converts a pandas DataFrame to a string representation of its contents.
+    Args:
+        data (pd.DataFrame): The DataFrame to convert.
+    Returns:
+        str: A string representation of the DataFrame, formatted as a list of parameters with their ranges and descriptions.
+    """
+    s = ''
+    for i in range(len(data)):
+        s += f"Parameter: {data['Parameter'][i]}; Range: {data['Range'][i]}; Description: {data['Description'][i]}."
+    return s
+
+
+def show_gaussians(param_dict: dict, parameters: list, styles: list):
+    """ Displays the Gaussian distributions for the given parameters and styles.
+    Args:
+        param_dict (dict): A dictionary containing parameters for each style.
+        parameters (list): A list of parameters to be displayed.
+        styles (list): A list of styles to be displayed (e.g., 'agg', 'norm').
+    Returns:
+        None: Displays the Gaussian distributions for each parameter and style.
+    """
+
+    num_params = len(parameters)
+    num_rows = (num_params + 1) // 2
+    fig, axes = plt.subplots(num_rows, 2, figsize=(14, 6 * num_rows))
+
+    axes = axes.flatten()
+
+    for ax, parameter in zip(axes, parameters):
+        for style in styles:
+            m = (param_dict[parameter][style]['min'] +
+                 param_dict[parameter][style]['max']) / 2
+
+            # Finding the standard deviation for 95% of the data to be within the range
+            s = (param_dict[parameter][style]['max'] - m) / \
+                stats.norm.ppf(0.975)
+
+            # Generate data
+            rng = np.random.default_rng(seed=42)  # For reproducibility
+            data = rng.normal(m, s, 5000)
+
+            # Plot the data
+            ax.hist(data, bins=30, density=True,
+                    alpha=0.6, label=f'{style} style')
+
+            # Plot the Gaussian distribution
+            xmin, xmax = ax.get_xlim()
+            x = np.linspace(xmin, xmax, 100)
+            p = np.exp(-0.5 * ((x - m) / s) ** 2) / (s * np.sqrt(2 * np.pi))
+            ax.plot(x, p, linewidth=2)
+
+        ax.set_title(f'Gaussian Distribution for {parameter}')
+        ax.legend()
+
+    # Hide any unused subplots
+    for i in range(len(parameters), len(axes)):
+        fig.delaxes(axes[i])
+
+    plt.tight_layout()
+    plt.show()

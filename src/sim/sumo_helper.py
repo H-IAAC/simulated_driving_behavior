@@ -381,19 +381,6 @@ def make_output_file(output_file_path, final_trips_file_path=None, random_trips_
     return output_file_path
 
 
-def csv_str(data: DataFrame) -> str:
-    """ Converts a pandas DataFrame to a string representation of its contents.
-    Args:
-        data (pd.DataFrame): The DataFrame to convert.
-    Returns:
-        str: A string representation of the DataFrame, formatted as a list of parameters with their ranges and descriptions.
-    """
-    s = ''
-    for i in range(len(data)):
-        s += f"Parameter: {data['Parameter'][i]}; Range: {data['Range'][i]}; Description: {data['Description'][i]}."
-    return s
-
-
 def clean_response(institutes: list[str]) -> list[str]:
     """
     Cleans the list of institutes by removing parenthesis and everything after it,
