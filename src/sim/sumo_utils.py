@@ -480,7 +480,7 @@ def get_param_value(param_dict: dict, parameter: str, style: str) -> tuple:
     # Finding the standard deviation for 95% of the data to be within the range
     s = (param_dict[parameter][style]['max'] - m) / stats.norm.ppf(0.975)
 
-    rng = np.random.default_rng(seed=42)
+    rng = np.random.default_rng()
     value = np.round(rng.normal(m, s), 2)
 
     if s <= 0:

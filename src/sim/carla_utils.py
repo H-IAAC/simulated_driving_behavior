@@ -5,6 +5,7 @@ import pandas as pd
 import sys
 import os
 import csv
+import scipy.stats as stats
 
 # sys.path.append('/opt/carla-simulator/PythonAPI/carla')
 
@@ -243,52 +244,45 @@ def configure_tm_vehicle(tm, vehicle, config: dict):
 
     # Speed difference from speed limit (in percent).
     # Negative => faster than limit; Positive => slower.
-    if 'speed_difference' in config:
-        tm.vehicle_percentage_speed_difference(
-            vehicle, config['speed_difference'])
-
-    # Absolute desired speed in m/s (used in override cases).
-    if 'desired_speed' in config:
-        tm.set_desired_speed(vehicle, config['desired_speed'])
 
     # Distance to keep from the leading vehicle (in meters).
     if 'distance_to_leading_vehicle' in config:
         tm.distance_to_leading_vehicle(
             vehicle, config['distance_to_leading_vehicle'])
 
-    # Enable or disable auto lane changes.
-    if 'auto_lane_change' in config:
-        tm.auto_lane_change(vehicle, config['auto_lane_change'])
-
-    # Enable/disable updating of vehicle lights by TM.
-    if 'update_vehicle_lights' in config:
-        tm.update_vehicle_lights(vehicle, config['update_vehicle_lights'])
-
     # Probability (0–100%) of ignoring traffic lights.
-    if 'ignore_lights' in config:
-        tm.ignore_lights_percentage(vehicle, config['ignore_lights'])
+    if 'ignore_lights_percentage' in config:
+        tm.ignore_lights_percentage(
+            vehicle, config['ignore_lights_percentage'])
 
     # Probability (0–100%) of ignoring stop signs.
-    if 'ignore_signs' in config:
-        tm.ignore_signs_percentage(vehicle, config['ignore_signs'])
+    if 'ignore_signs_percentage' in config:
+        tm.ignore_signs_percentage(vehicle, config['ignore_signs_percentage'])
 
     # Probability (0–100%) of ignoring other vehicles.
-    if 'ignore_vehicles' in config:
-        tm.ignore_vehicles_percentage(vehicle, config['ignore_vehicles'])
+    if 'ignore_vehicles_percentage' in config:
+        tm.ignore_vehicles_percentage(
+            vehicle, config['ignore_vehicles_percentage'])
 
     # Probability (0–100%) of following the keep-slow-lane rule.
-    if 'keep_slow_lane' in config:
-        tm.keep_slow_lane_rule_percentage(vehicle, config['keep_slow_lane'])
+    if 'keep_slow_lane_rule_percentage' in config:
+        tm.keep_slow_lane_rule_percentage(
+            vehicle, config['keep_slow_lane_rule_percentage'])
 
     # Probability (0–100%) of randomly performing a left lane change.
-    if 'random_left_lanechange' in config:
+    if 'random_left_lanechange_percentage' in config:
         tm.random_left_lanechange_percentage(
-            vehicle, config['random_left_lanechange'])
+            vehicle, config['random_left_lanechange_percentage'])
 
     # Probability (0–100%) of randomly performing a right lane change.
-    if 'random_right_lanechange' in config:
+    if 'random_right_lanechange_percentage' in config:
         tm.random_right_lanechange_percentage(
-            vehicle, config['random_right_lanechange'])
+            vehicle, config['random_right_lanechange_percentage'])
+
+    if 'vehicle_percentage_speed_difference' in config:
+        # Percentage speed difference from the speed limit.
+        tm.vehicle_percentage_speed_difference(
+            vehicle, config['vehicle_percentage_speed_difference'])
 
 
 def set_sync_mode(client, delta_time, render):
@@ -526,3 +520,84 @@ def run_simulation(client, sim_params, sps_routines, output_folder):
         for key, value in sim_params.items():
             writer.writerow([key, value])
     print(f"Metadata saved in {os.path.join(output_folder, 'metadata.csv')}")
+
+
+def get_param_value(param_dict: dict, parameter: str, style: str) -> tuple:
+    """ Generates a random value for a given parameter based on a Gaussian distribution defined in the param_dict.
+    Args:
+        param_dict (dict): A dictionary containing parameters for each style.
+        parameter (str): The parameter for which to generate a value.
+        style (str): The style of the vehicle (e.g., 'agg', 'norm').
+    Returns:
+        tuple: A tuple containing the generated value and its probability.
+    """
+
+    m = (param_dict[parameter][style]['min'] +
+         param_dict[parameter][style]['max'])/2
+    # Finding the standard deviation for 95% of the data to be within the range
+    s = (param_dict[parameter][style]['max'] - m) / stats.norm.ppf(0.975)
+
+    rng = np.random.default_rng()
+    value = np.round(rng.normal(m, s), 2)
+
+    if s <= 0:
+        print(f"Error: The standard deviation for {parameter} is {s}")
+
+    cdf = stats.norm.cdf(value, loc=m, scale=s)
+    if value > m:
+        probability = 1 - cdf
+    else:
+        probability = cdf
+
+    return value, probability
+
+
+def generate_vehicle_types(param_dict: dict, styles: list, n: int) -> dict:
+    """
+    Generates vehicle types based on the given parameter dictionary and styles and assigns a probability to each vType based on how likely it is to be real.
+    Args:
+        param_dict (dict): A dictionary containing parameters for each style.
+        styles (list): A list of styles to be generated (e.g., 'agg', 'norm').
+        n (int): The number of vehicle types to generate for each style.
+    Returns:
+        dict: A dictionary containing the generated vehicle types for each style.
+    """
+    vtypes_dist = {}
+    # Keeps the probability score for each of the generated vTypes
+    param_probs = np.zeros(n)
+    for style in styles:
+        vtypes_dist[f'veh_{style}'] = {}
+        for i in range(n):
+            vtypes_dist[f'veh_{style}'][f'veh_{style}{i}'] = {}
+            prob = 0
+            for parameter in list(param_dict.keys()):
+                # Gets value for parameter and the probability of getting that value
+                value, probability = get_param_value(
+                    param_dict, parameter, style)
+                vtypes_dist[f'veh_{style}'][f'veh_{style}{i}'][parameter] = float(
+                    value)
+                prob += probability  # Sum of probabilities for each parameter
+
+            param_probs[i] = prob
+
+        # Softmax function to normalize the probabilities
+        softm = np.exp(param_probs) / np.sum(np.exp(param_probs))
+
+        for i in range(n):
+            # Assigning the normalized probability to each vType
+            vtypes_dist[f'veh_{style}'][f'veh_{style}{i}']["probability"] = softm[i]
+
+    return vtypes_dist
+
+
+def get_random_types(vtypes_dist, behaviors):
+
+    dicts = []
+    for behavior in behaviors:
+        rd = np.random.randint(0, len(vtypes_dist[f'veh_{behavior}']))
+        dicts.append(vtypes_dist[f'veh_{behavior}'][f'veh_{behavior}{rd}'])
+
+        print(
+            f"Selected vehicle type **veh_{behavior}{rd}** for behavior **{behavior}**")
+
+    return dicts[0], dicts[1]

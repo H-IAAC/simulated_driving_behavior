@@ -1,98 +1,50 @@
 {
-  "distance_to_leading_vehicle": {
-    "normal": {
-      "explanation": "normal drivers maintain a safe distance",
-      "min": 5,
-      "max": 10
+  "veh_normal": {
+    "veh_normal0": {
+      "distance_to_leading_vehicle": 17.33,
+      "ignore_lights_percentage": 3.1,
+      "ignore_signs_percentage": 2.24,
+      "ignore_vehicles_percentage": 0.28,
+      "keep_slow_lane_rule_percentage": 74.01,
+      "random_left_lanechange_percentage": 6.9,
+      "random_right_lanechange_percentage": 11.79,
+      "vehicle_percentage_speed_difference": 5.23,
+      "probability": 0.5069099530952225
     },
-    "aggressive": {
-      "explanation": "aggressive drivers are closer to the vehicle in front",
-      "min": 2,
-      "max": 5
+    "veh_normal1": {
+      "distance_to_leading_vehicle": 24.24,
+      "ignore_lights_percentage": 0.29,
+      "ignore_signs_percentage": 3.74,
+      "ignore_vehicles_percentage": 2.66,
+      "keep_slow_lane_rule_percentage": 78.25,
+      "random_left_lanechange_percentage": 11.31,
+      "random_right_lanechange_percentage": 11.84,
+      "vehicle_percentage_speed_difference": 3.07,
+      "probability": 0.49309004690477753
     }
   },
-  "ignore_lights_percentage": {
-    "normal": {
-      "explanation": "normal drivers follow traffic lights",
-      "min": 0,
-      "max": 5
+  "veh_aggressive": {
+    "veh_aggressive0": {
+      "distance_to_leading_vehicle": 9.23,
+      "ignore_lights_percentage": 24.51,
+      "ignore_signs_percentage": 28.15,
+      "ignore_vehicles_percentage": 17.25,
+      "keep_slow_lane_rule_percentage": 36.43,
+      "random_left_lanechange_percentage": 45.06,
+      "random_right_lanechange_percentage": 36.11,
+      "vehicle_percentage_speed_difference": -9.66,
+      "probability": 0.38876859382680995
     },
-    "aggressive": {
-      "explanation": "aggressive drivers ignore traffic lights",
-      "min": 20,
-      "max": 50
-    }
-  },
-  "ignore_signs_percentage": {
-    "normal": {
-      "explanation": "normal drivers follow stop signs",
-      "min": 0,
-      "max": 5
-    },
-    "aggressive": {
-      "explanation": "aggressive drivers ignore stop signs",
-      "min": 30,
-      "max": 60
-    }
-  },
-  "ignore_vehicles_percentage": {
-    "normal": {
-      "explanation": "normal drivers avoid collisions",
-      "min": 0,
-      "max": 5
-    },
-    "aggressive": {
-      "explanation": "aggressive drivers are less likely to avoid collisions",
-      "min": 10,
-      "max": 30
-    }
-  },
-  "keep_slow_lane_rule_percentage": {
-    "normal": {
-      "explanation": "normal drivers stay in the slow lane",
-      "min": 50,
-      "max": 80
-    },
-    "aggressive": {
-      "explanation": "aggressive drivers are less likely to stay in the slow lane",
-      "min": 10,
-      "max": 30
-    }
-  },
-  "random_left_lanechange_percentage": {
-    "normal": {
-      "explanation": "normal drivers rarely change lanes",
-      "min": 5,
-      "max": 15
-    },
-    "aggressive": {
-      "explanation": "aggressive drivers are more likely to change lanes",
-      "min": 40,
-      "max": 60
-    }
-  },
-  "random_right_lanechange_percentage": {
-    "normal": {
-      "explanation": "normal drivers rarely change lanes",
-      "min": 5,
-      "max": 15
-    },
-    "aggressive": {
-      "explanation": "aggressive drivers are more likely to change lanes",
-      "min": 40,
-      "max": 60
-    }
-  },
-  "vehicle_percentage_speed_difference": {
-    "normal": {
-      "explanation": "normal drivers maintain a safe speed",
-      "min": 0,
-      "max": 10
-    },
-    "aggressive": {
-      "explanation": "aggressive drivers speed up",
-      "min": -20,
-      "max": -5
+    "veh_aggressive1": {
+      "distance_to_leading_vehicle": 8.42,
+      "ignore_lights_percentage": 34.28,
+      "ignore_signs_percentage": 17.26,
+      "ignore_vehicles_percentage": 16.29,
+      "keep_slow_lane_rule_percentage": 45.42,
+      "random_left_lanechange_percentage": 32.89,
+      "random_right_lanechange_percentage": 42.38,
+      "vehicle_percentage_speed_difference": -13.93,
+      "probability": 0.61123140617319
     }
   }
 }
