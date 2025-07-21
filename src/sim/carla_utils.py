@@ -1,9 +1,11 @@
 # from agents.navigation.global_route_planner import GlobalRoutePlanner
-import numpy as np
-import carla
-import pandas as pd
 import sys
 import os
+import time as _time
+
+import carla
+import numpy as np
+import pandas as pd
 import csv
 import scipy.stats as stats
 
@@ -264,11 +266,6 @@ def configure_tm_vehicle(tm, vehicle, config: dict):
         tm.ignore_vehicles_percentage(
             vehicle, config['ignore_vehicles_percentage'])
 
-    # Probability (0–100%) of following the keep-slow-lane rule.
-    if 'keep_slow_lane_rule_percentage' in config:
-        tm.keep_slow_lane_rule_percentage(
-            vehicle, config['keep_slow_lane_rule_percentage'])
-
     # Probability (0–100%) of randomly performing a left lane change.
     if 'random_left_lanechange_percentage' in config:
         tm.random_left_lanechange_percentage(
@@ -464,7 +461,7 @@ def run_simulation(client, sim_params, sps_routines, output_folder):
     Raises:
         KeyboardInterrupt: If the simulation is interrupted by the user.
     """
-
+    end_times = []
     agent_params = sim_params['agent_params']
     for beh in agent_params.keys():
         for i, sps in enumerate(sps_routines):
@@ -489,6 +486,7 @@ def run_simulation(client, sim_params, sps_routines, output_folder):
                 agent_behavior = beh
                 id = f'veh_{i}_{agent_behavior}'
 
+                start_time = _time.time()
                 # Here traffic lights are frozen to green in order to reduce simulation time
                 follow_route(
                     client,
@@ -502,6 +500,8 @@ def run_simulation(client, sim_params, sps_routines, output_folder):
                     fixed_spectator=sim_params['fixed_spectator'],
                     draw_debug_route=sim_params['draw_debug_route'],
                     render=sim_params['render'])
+
+                end_times.append(_time.time() - start_time)
 
                 save_data_to_csv(
                     id, imu_df, gnss_df, output_folder)
@@ -519,6 +519,8 @@ def run_simulation(client, sim_params, sps_routines, output_folder):
         writer = csv.writer(csvfile)
         for key, value in sim_params.items():
             writer.writerow([key, value])
+        writer.writerow(
+            ["execution_time_sec", sum(end_times) / len(end_times)])
     print(f"Metadata saved in {os.path.join(output_folder, 'metadata.csv')}")
 
 

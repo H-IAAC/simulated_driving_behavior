@@ -285,8 +285,8 @@ def parse_veh_fixed_xml(param_dict, styles, output_path, car_follow_model="IDM",
 
         xml += f'\t<vType id=\"veh_{style}\" carFollowModel=\"{car_follow_model}\" laneChangeModel=\"{lc_model}\" '
 
-        for parameter in param_dict.keys():
-            xml += f"{parameter}=\"{param_dict[parameter][style]}\" "
+        for parameter in param_dict[styles[0]].keys():
+            xml += f"{parameter}=\"{param_dict[style][parameter]}\" "
 
         xml += 'probability="1.0">\n'
         xml += '\t\t<param key="device.rerouting.probability" value="1.0"/>\n'

@@ -1,9 +1,10 @@
 vehicle_bp,"ActorBlueprint(id=vehicle.tesla.model3,tags=[tesla, model3, vehicle])"
-sensor_bps,"[<carla.libcarla.ActorBlueprint object at 0x7bf12d6c0e40>, <carla.libcarla.ActorBlueprint object at 0x7bf12d6bf040>]"
+sensor_bps,"[<carla.libcarla.ActorBlueprint object at 0x76b133789440>, <carla.libcarla.ActorBlueprint object at 0x76b133789640>]"
 delta_time,0.1
 n_extra_vehicles,10
 freeze_traffic_lights,True
-fixed_spectator,False
+fixed_spectator,True
 draw_debug_route,True
 render,True
-agent_params,"{'normal': {}, 'aggressive': {}}"
+agent_params,"{'aggressive': {'distance_to_leading_vehicle': 10, 'ignore_lights_percentage': 10, 'ignore_signs_percentage': 10, 'ignore_vehicles_percentage': 10, 'keep_slow_lane_rule_percentage': 10, 'random_left_lanechange_percentage': 10, 'random_right_lanechange_percentage': 10, 'vehicle_percentage_speed_difference': 10}, 'normal': {'distance_to_leading_vehicle': 2, 'ignore_lights_percentage': 2, 'ignore_signs_percentage': 2, 'ignore_vehicles_percentage': 2, 'keep_slow_lane_rule_percentage': 2, 'random_left_lanechange_percentage': 2, 'random_right_lanechange_percentage': 2, 'vehicle_percentage_speed_difference': 2}}"
+execution_time_sec,24.190263271331787

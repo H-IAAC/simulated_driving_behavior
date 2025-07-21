@@ -1,26 +1,18 @@
 {
-  "maxSpeed": {
-    "normal": 13.88888888888889,
-    "aggressive": 19.444444444444443
+  "aggressive": {
+    "maxSpeed": 19.444444444444443,
+    "accel": 3.0,
+    "decel": 5.0,
+    "speedFactor": 1.2,
+    "emergencyDecel": 10.0,
+    "vClass": "passenger"
   },
-  "accel": {
-    "normal": 2.5,
-    "aggressive": 3.0
-  },
-  "decel": {
-    "normal": 4.5,
-    "aggressive": 5.0
-  },
-  "speedFactor": {
-    "normal": 1.0,
-    "aggressive": 1.2
-  },
-  "emergencyDecel": {
-    "normal": 9.0,
-    "aggressive": 10.0
-  },
-  "vClass": {
-    "normal": "passenger",
-    "aggressive": "passenger"
+  "normal": {
+    "maxSpeed": 13.88888888888889,
+    "accel": 2.5,
+    "decel": 4.5,
+    "speedFactor": 1.0,
+    "emergencyDecel": 9.0,
+    "vClass": "passenger"
   }
 }

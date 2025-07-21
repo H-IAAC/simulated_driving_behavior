@@ -6,6 +6,7 @@ import shutil
 
 from . import sumo_helper
 import csv
+import time as _time
 
 sumoBinary = "/usr/bin/sumo-gui"
 sumoCmd = [sumoBinary, "-c", "osm.sumocfg"]
@@ -73,10 +74,12 @@ def get_all_variables(folder_path, veh_ids, delta_time=0.05, end_hours=0, use_gu
             traci.trafficlight.setCompleteRedYellowGreenDefinition(
                 tls_id, new_logic)
 
+    start_time = _time.time()
+
     time = 0
     while traci.simulation.getMinExpectedNumber() > 0:
 
-        # Subscribe to vehicles that have just departed
+        # Subscribe to vehicles that have justdeparted
         for veh_id in (set(traci.simulation.getDepartedIDList()) & set(veh_ids)):
             print(f"Vehicle {veh_id} has departed")
             traci.vehicle.subscribe(
@@ -98,10 +101,12 @@ def get_all_variables(folder_path, veh_ids, delta_time=0.05, end_hours=0, use_gu
         traci.simulationStep()
 
     traci.close()
-    return v_variables
+    end_time = _time.time()
+
+    return v_variables, (end_time - start_time)
 
 
-def save_data(veh_variables, data_folder_path, delta_time, new_dir=False, verify=True, use_lat_lon=True, speed_threshold=6, acc_threshold=6, derivative_threshold=3):
+def save_data(veh_variables, data_folder_path, delta_time, exec_time, new_dir=False, verify=True, use_lat_lon=True, speed_threshold=6, acc_threshold=6, derivative_threshold=3):
     """
     Saves the data from the simulation in a folder with the given name.
     Args:
@@ -235,6 +240,7 @@ def save_data(veh_variables, data_folder_path, delta_time, new_dir=False, verify
         "derivative_threshold": derivative_threshold,
         "vehicle_ids": list(veh_variables[list(veh_variables.keys())[0]].keys()) if veh_variables else [],
         "timesteps": len(veh_variables),
+        "execution_time_sec": exec_time,
     }
 
     metadata_path = os.path.join(data_folder_path, "metadata.csv")
