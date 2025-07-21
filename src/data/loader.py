@@ -188,3 +188,27 @@ def stack_data(real_data, synthetic_data, percentage=0.5):
                             axis=0, ignore_index=True)
 
     return merged_data
+
+
+def load_merged_data(merged_path):
+    merged_sumo_uah = {
+        'fixed': {
+            'normal': pd.read_csv(f'{merged_path}/sumo_uah/fixed/merged_sumo_uah_normal.csv'),
+            'aggressive': pd.read_csv(f'{merged_path}/sumo_uah/fixed/merged_sumo_uah_aggressive.csv')
+        },
+        'llm': {
+            'normal': pd.read_csv(f'{merged_path}/sumo_uah/llm/merged_sumo_uah_normal.csv'),
+            'aggressive': pd.read_csv(f'{merged_path}/sumo_uah/llm/merged_sumo_uah_aggressive.csv')
+        }
+    }
+    merge_carla_uah = {
+        'fixed': {
+            'normal': pd.read_csv(f'{merged_path}/carla_uah/fixed/merged_carla_uah_normal.csv'),
+            'aggressive': pd.read_csv(f'{merged_path}/carla_uah/fixed/merged_carla_uah_aggressive.csv')
+        },
+        'llm': {
+            'normal': pd.read_csv(f'{merged_path}/carla_uah/llm/merged_carla_uah_llm_normal.csv'),
+            'aggressive': pd.read_csv(f'{merged_path}/carla_uah/llm/merged_carla_uah_llm_aggressive.csv')
+        }
+    }
+    return merged_sumo_uah, merge_carla_uah
