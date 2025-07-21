@@ -13,17 +13,19 @@
   <trip id="veh_0_normal" type="veh_normal" depart="0" from="25.0.00" to="25.0.00">
     <stop edge="-7.0.00" duration="10"/>
     <stop edge="6.0.00" duration="10"/>
-    <stop edge="10.0.00" duration="10"/>
     <stop edge="4.0.00" duration="10"/>
     <stop edge="10.0.00" duration="10"/>
-    <stop edge="1.0.00" duration="10"/>
-    <stop edge="6.0.00" duration="10"/>
-    <stop edge="-7.0.00" duration="10"/>
-    <stop edge="25.0.00" duration="10"/>
-    <stop edge="-19.0.00" duration="10"/>
     <stop edge="-12.0.00" duration="10"/>
+    <stop edge="10.0.00" duration="10"/>
+    <stop edge="10.0.00" duration="10"/>
+    <stop edge="6.0.00" duration="10"/>
+    <stop edge="10.0.00" duration="10"/>
+    <stop edge="-7.0.00" duration="10"/>
+    <stop edge="-12.0.00" duration="10"/>
+    <stop edge="-19.0.00" duration="10"/>
     <stop edge="1.0.00" duration="10"/>
-    <stop edge="4.0.00" duration="10"/>
+    <stop edge="-19.0.00" duration="10"/>
+    <stop edge="1.0.00" duration="10"/>
   </trip>
   <vehicle id="0" depart="0.00" type="veh_normal">
     <route edges="16.0.00 -1.0.00 -25.0.00 -10.0.00"/>
@@ -34,17 +36,19 @@
   <trip id="veh_0_aggressive" type="veh_aggressive" depart="20" from="25.0.00" to="25.0.00">
     <stop edge="-7.0.00" duration="10"/>
     <stop edge="6.0.00" duration="10"/>
-    <stop edge="10.0.00" duration="10"/>
     <stop edge="4.0.00" duration="10"/>
     <stop edge="10.0.00" duration="10"/>
-    <stop edge="1.0.00" duration="10"/>
-    <stop edge="6.0.00" duration="10"/>
-    <stop edge="-7.0.00" duration="10"/>
-    <stop edge="25.0.00" duration="10"/>
-    <stop edge="-19.0.00" duration="10"/>
     <stop edge="-12.0.00" duration="10"/>
+    <stop edge="10.0.00" duration="10"/>
+    <stop edge="10.0.00" duration="10"/>
+    <stop edge="6.0.00" duration="10"/>
+    <stop edge="10.0.00" duration="10"/>
+    <stop edge="-7.0.00" duration="10"/>
+    <stop edge="-12.0.00" duration="10"/>
+    <stop edge="-19.0.00" duration="10"/>
     <stop edge="1.0.00" duration="10"/>
-    <stop edge="4.0.00" duration="10"/>
+    <stop edge="-19.0.00" duration="10"/>
+    <stop edge="1.0.00" duration="10"/>
   </trip>
   <vehicle id="2" depart="20.00" type="veh_normal">
     <route edges="2.0.00 -25.0.00 9.0.00 -22.0.00 -23.0.00 -12.0.00 18.0.00"/>

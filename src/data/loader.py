@@ -179,3 +179,35 @@ def load_synthetic_data(town_data_directory):
             print(f"Path {path} does not exist. Skipping...")
 
     return carla_data, sumo_data
+
+
+def stack_data(real_data, synthetic_data, percentage=0.5):
+    """Merge real and synthetic data based on a specified percentage.
+
+    Args:
+        real_data (dict): Dictionary containing real data.
+        synthetic_data (dict): Dictionary containing synthetic data.
+        percentage (float): Percentage of the total dataset to be filled with synthetic data.
+
+    Returns:
+        dict: Merged dataset.
+    """
+    n_synth_samples = int(percentage * len(real_data) / (1 - percentage))
+    if n_synth_samples > len(synthetic_data):
+        print(
+            f"Warning: Requested synthetic size {n_synth_samples} exceeds available synthetic data size {len(synthetic_data)}. Using all available synthetic data.")
+        n_synth_samples = len(synthetic_data)
+
+    print(
+        f"Using {n_synth_samples} synthetic samples to merge with real data {len(real_data)} real samples.")
+    print(
+        f"Percentage of synthetic data: {(n_synth_samples /  (n_synth_samples + len(real_data))) * 100:.2f}%")
+
+    # Select the first n_synth_samples from the synthetic data
+    synthetic_data = synthetic_data.iloc[:int(n_synth_samples)]
+
+    # Concatenate real and synthetic data
+    merged_data = pd.concat([real_data, synthetic_data],
+                            axis=0, ignore_index=True)
+
+    return merged_data
