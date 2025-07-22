@@ -33,3 +33,19 @@ def sliding_windows(data, window_size=7, step_size=1):
         y.append(label)
 
     return np.array(X), np.array(y)
+
+
+def one_hot_encode(column_vector, one_hot_keys):
+    # This function takes a column vector and a dictionary of keys to one-hot encode the column
+    # The keys are the unique values in the column and the values are the one-hot encoded values
+    # The output is a 2D array with the one-hot encoded values
+    encoded_array = np.zeros(len(column_vector))
+
+    # Iterate over the column vector and encode the values
+    for i, behavior in enumerate(column_vector):
+        if behavior in one_hot_keys:
+            encoded_array[i] = one_hot_keys[behavior]
+        else:
+            raise ValueError(f"Value {i} not found in one_hot_keys")
+
+    return encoded_array
