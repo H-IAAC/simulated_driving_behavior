@@ -134,9 +134,9 @@ def save_data(veh_variables, data_folder_path, delta_time, exec_time, new_dir=Fa
         for veh_id, veh_data in data.items():
 
             if use_lat_lon:
-                columns = 'timestamp,latitude,longitude,speed,speed_x,speed_y,acceleration,acceleration_x,acceleration_y,angle,acc_diff,gyroscope_z'
+                columns = 'timestamp,latitude,longitude,speed,acceleration,angle,acc_diff,gyro_z'
             else:
-                columns = 'timestamp,x_pos,y_pos,speed,speed_x,speed_y,acc,acc_x,acc_y,angle,acc_diff,gyro_z'
+                columns = 'timestamp,x_pos,y_pos,speed,acc,angle,acc_diff,gyro_z'
 
             nolabel_path = f'{data_folder_path}/{veh_id}.csv'
 
@@ -195,12 +195,6 @@ def save_data(veh_variables, data_folder_path, delta_time, exec_time, new_dir=Fa
                 print(
                     f'Vehicle {veh_id} at timestep {timestep} had a INVALID acceleration of {veh_data[ACCELERATION]}, it was changed to 0')
 
-            # Calculating the decomposed acceleration and speed
-            write_speed_x = write_speed * np.cos(np.radians(write_angle))
-            write_speed_y = write_speed * np.sin(np.radians(write_angle))
-            write_acc_x = write_acc * np.cos(np.radians(write_angle))
-            write_acc_y = write_acc * np.sin(np.radians(write_angle))
-
             try:
                 acc_diff = np.abs((veh_variables[timestep][veh_id][ACCELERATION] -
                                    veh_variables[timestep - delta_time][veh_id][ACCELERATION]) / delta_time)
@@ -220,9 +214,9 @@ def save_data(veh_variables, data_folder_path, delta_time, exec_time, new_dir=Fa
                 gyroscope_z = 0.0
 
             if use_lat_lon:
-                line = f'{timestep},{veh_data["latitude"]},{veh_data["longitude"]},{write_speed},{write_speed_x},{write_speed_y},{write_acc},{write_acc_x},{write_acc_y},{write_angle},{acc_diff},{gyroscope_z}'
+                line = f'{timestep},{veh_data["latitude"]},{veh_data["longitude"]},{write_speed},{write_acc},{write_angle},{acc_diff},{gyroscope_z}'
             else:
-                line = f'{timestep},{write_x},{write_y},{write_speed},{write_speed_x},{write_speed_y},{write_acc},{write_acc_x},{write_acc_y},{write_angle},{acc_diff},{gyroscope_z}'
+                line = f'{timestep},{write_x},{write_y},{write_speed},{write_acc},{write_angle},{acc_diff},{gyroscope_z}'
 
             with open(nolabel_path, 'a') as f:
                 f.write(f'{line}\n')

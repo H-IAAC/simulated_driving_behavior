@@ -485,14 +485,11 @@ def run_simulation(client, sim_params, sps_routines, output_folder):
                 # timestamp: simulation time - s
                 # acc: m/s^2
                 # gyro: rad/s
-                # compass: rad
+                # compass: degrees
                 global imu_df, gnss_df
                 imu_df = pd.DataFrame(columns=[
                                       'timestamp', 'acc_x', 'acc_y', 'acc_z', 'gyro_x', 'gyro_y', 'gyro_z', 'compass'])
 
-                # timestamp: simulation time - s
-                # latitude: rad
-                # longitude: rad
                 # orientation: rad
                 gnss_df = pd.DataFrame(
                     columns=['timestamp', 'latitude', 'longitude'])
