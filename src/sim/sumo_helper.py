@@ -493,10 +493,11 @@ def save_routines_csv(location_time_list: list[dict], veh_ids: list, dir_path: s
         print(f"Route saved to: {csv_path}")
 
 
-def save_ids_styles_csv(veh_ids: list[str], veh_styles: list[str], output_path: str):
+def save_ids_styles_csv(veh_ids: list[str], output_path: str):
     with open(output_path, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(['id', 'style'])
-        for rid, style in zip(veh_ids, veh_styles):
-            writer.writerow([rid, style])
+        for rid in veh_ids:
+            # Default style is 'normal'
+            writer.writerow([rid, rid.split('_')[-1]])
     print(f"Saved to {output_path}")

@@ -20,36 +20,204 @@
 		<param key="device.rerouting.adaptation-steps" value="18" />
 		<param key="device.rerouting.adaptation-interval" value="10" />
 	</vType>
-	<trip id="veh_0_aggressive" type="veh_aggressive0" depart="0" from="25.0.00" to="25.0.00">
-	<stop edge="-7.0.00" duration="10" />
-	<stop edge="4.0.00" duration="10" />
-	<stop edge="6.0.00" duration="10" />
+	<trip id="veh_0_aggressive" type="veh_aggressive1" depart="0" from="25.0.00" to="25.0.00">
 	<stop edge="-7.0.00" duration="10" />
 	<stop edge="-12.0.00" duration="10" />
 	<stop edge="10.0.00" duration="10" />
 	<stop edge="6.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
 	<stop edge="10.0.00" duration="10" />
-	<stop edge="4.0.00" duration="10" />
-	<stop edge="1.0.00" duration="10" />
 	<stop edge="-19.0.00" duration="10" />
-	<stop edge="-7.0.00" duration="10" />
-	<stop edge="25.0.00" duration="10" />
-	<stop edge="4.0.00" duration="10" />
-	<stop edge="6.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
 </trip><trip id="veh_0_normal" type="veh_normal1" depart="20" from="25.0.00" to="25.0.00">
 	<stop edge="-7.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+</trip><trip id="veh_1_aggressive" type="veh_aggressive1" depart="0" from="25.0.00" to="25.0.00">
+	<stop edge="-7.0.00" duration="10" />
 	<stop edge="4.0.00" duration="10" />
 	<stop edge="6.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+</trip><trip id="veh_1_normal" type="veh_normal1" depart="20" from="25.0.00" to="25.0.00">
 	<stop edge="-7.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+</trip><trip id="veh_2_aggressive" type="veh_aggressive1" depart="0" from="25.0.00" to="25.0.00">
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+</trip><trip id="veh_2_normal" type="veh_normal1" depart="20" from="25.0.00" to="25.0.00">
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+</trip><trip id="veh_3_aggressive" type="veh_aggressive1" depart="0" from="25.0.00" to="25.0.00">
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-7.0.00" duration="10" />
+</trip><trip id="veh_3_normal" type="veh_normal1" depart="20" from="25.0.00" to="25.0.00">
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-7.0.00" duration="10" />
+</trip><trip id="veh_4_aggressive" type="veh_aggressive1" depart="0" from="25.0.00" to="25.0.00">
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-7.0.00" duration="10" />
+</trip><trip id="veh_4_normal" type="veh_normal1" depart="20" from="25.0.00" to="25.0.00">
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-7.0.00" duration="10" />
+</trip><trip id="veh_5_aggressive" type="veh_aggressive1" depart="0" from="25.0.00" to="25.0.00">
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+</trip><trip id="veh_5_normal" type="veh_normal1" depart="20" from="25.0.00" to="25.0.00">
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+</trip><trip id="veh_6_aggressive" type="veh_aggressive1" depart="0" from="25.0.00" to="25.0.00">
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+</trip><trip id="veh_6_normal" type="veh_normal1" depart="20" from="25.0.00" to="25.0.00">
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+</trip><trip id="veh_7_aggressive" type="veh_aggressive1" depart="0" from="25.0.00" to="25.0.00">
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
 	<stop edge="-12.0.00" duration="10" />
 	<stop edge="10.0.00" duration="10" />
 	<stop edge="6.0.00" duration="10" />
 	<stop edge="10.0.00" duration="10" />
-	<stop edge="4.0.00" duration="10" />
-	<stop edge="1.0.00" duration="10" />
 	<stop edge="-19.0.00" duration="10" />
-	<stop edge="-7.0.00" duration="10" />
-	<stop edge="25.0.00" duration="10" />
-	<stop edge="4.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
 	<stop edge="6.0.00" duration="10" />
+</trip><trip id="veh_7_normal" type="veh_normal1" depart="20" from="25.0.00" to="25.0.00">
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+</trip><trip id="veh_8_aggressive" type="veh_aggressive1" depart="0" from="25.0.00" to="25.0.00">
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+</trip><trip id="veh_8_normal" type="veh_normal1" depart="20" from="25.0.00" to="25.0.00">
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+</trip><trip id="veh_9_aggressive" type="veh_aggressive1" depart="0" from="25.0.00" to="25.0.00">
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
+</trip><trip id="veh_9_normal" type="veh_normal1" depart="20" from="25.0.00" to="25.0.00">
+	<stop edge="-7.0.00" duration="10" />
+	<stop edge="4.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="6.0.00" duration="10" />
+	<stop edge="-12.0.00" duration="10" />
+	<stop edge="10.0.00" duration="10" />
+	<stop edge="-19.0.00" duration="10" />
+	<stop edge="1.0.00" duration="10" />
 </trip></routes>

@@ -5,4 +5,5 @@ speed_threshold,6
 acc_threshold,6
 derivative_threshold,3
 vehicle_ids,[]
-timesteps,20996
+timesteps,21016
+execution_time_sec,9.183151721954346
