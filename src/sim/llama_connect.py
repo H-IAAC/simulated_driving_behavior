@@ -41,20 +41,36 @@ def get_response(message: str) -> str:
     return chat_completion.choices[0].message.content
 
 
-def get_trip_carla(places):
+def get_trip_carla(places, short=False):
     instructions_content = ("Plan the information of a person.")
-    message = [
-        {
-            "role": "system",
-            "content": "You need to plan the routine of a person who has access to the following places: {places}. This person goes to a lot of places during the day and never stays more than an hour anywhere. Be creative and consider this person does not like to stay to much time at the same place. Maybe they go to the gym in the morning and in the evening, they have to take their kids to and from school, go to the bar and to the movies at night, for example. This person always gets home very late. Your response should be in a JSON format showing only the current location and current activity. Never include locations to activities. Always start the day at time 7 at home and end the day at time 23 at home, update every hour. Locations always have a single place, never two. Follow the example where the first number is the time: {{'7': {{'location':'home', 'activity':'wake up'}}, '8': {{'location':'school', 'activity':'study'}}, '9':{{'location':'cafe', 'activity':'breakfast".format(
-                places=", ".join(places),
-            )
-        },
-        {
-            "role": "user",
-            "content": instructions_content,
-        }
-    ]
+    if short:
+        message = [
+            {
+                "role": "system",
+                "content": "You need to plan the routine of a person who has access to the following places: {places}. This persons must go through all the places throughout the day, but never visit them more than two times a day. Consider this person does not spend more than one hour at each place and when there are no more places left, they return home. Your response should be in a JSON format showing only the current location and current activity. Never include locations to activities. Always start the day at time 7 at home and end the day at home, after having visited all the places at least one. Update every hour. Locations always have a single place, never two. Follow the example where the first number is the time: {{'7': {{'location':'home', 'activity':'wake up'}}, '8': {{'location':'school', 'activity':'study'}}, '9':{{'location':'cafe', 'activity':'breakfast".format(
+                    places=", ".join(places),
+                )
+            },
+            {
+                "role": "user",
+                "content": instructions_content,
+            }
+        ]
+
+    else:
+        message = [
+            {
+                "role": "system",
+                "content": "You need to plan the routine of a person who has access to the following places: {places}. This person goes to a lot of places during the day and never stays more than an hour anywhere. Be creative and consider this person does not like to stay to much time at the same place. Maybe they go to the gym in the morning and in the evening, they have to take their kids to and from school, go to the bar and to the movies at night, for example. This person always gets home very late. Your response should be in a JSON format showing only the current location and current activity. Never include locations to activities. Always start the day at time 7 at home and end the day at time 23 at home, update every hour. Locations always have a single place, never two. Follow the example where the first number is the time: {{'7': {{'location':'home', 'activity':'wake up'}}, '8': {{'location':'school', 'activity':'study'}}, '9':{{'location':'cafe', 'activity':'breakfast".format(
+                    places=", ".join(places),
+                )
+            },
+            {
+                "role": "user",
+                "content": instructions_content,
+            }
+        ]
+
     chat_completion = client.chat.completions.create(
         messages=message, model="llama3-8b-8192", temperature=1, response_format={"type": "json_object"})
 
@@ -102,7 +118,7 @@ def get_trip_sumo(student_info: str, places: dict) -> str:
     return chat_completion.choices[0].message.content
 
 
-def response_check(response: str, possible_locations: list) -> bool:
+def response_check(response: str, possible_locations: list, short: bool = False) -> bool:
     """ Checks if the response from the LLM makes sense.
     Args:
         response (str): The response from the LLM in JSON format.
@@ -112,13 +128,14 @@ def response_check(response: str, possible_locations: list) -> bool:
     """
 
     response = json.loads(response)
-    if len(response) < 17:
-        print("Error: The response is missing some hours")
-        return False
+    if not short:
+        if len(response) < 17:
+            print("Error: The response is missing some hours")
+            return False
 
-    if len(response) > 24:
-        print("Error: The response has too many hours")
-        return False
+        if len(response) > 24:
+            print("Error: The response has too many hours")
+            return False
 
     for item in response:
         try:
@@ -316,14 +333,26 @@ def save_response(response, generated_routines, routines_folder):
     df.to_csv(f'{routines_folder}/llm_routine_{generated_routines}.csv')
 
 
-def generate_routines(places, n_of_routines, routines_folder):
+def generate_routines(places, n_of_routines, routines_folder, short=False):
+    """ Generates a number of routines using the LLAMA model and saves them to a CSV file
+    Args:
+        places (list): A list of places that the LLM can generate routines for.
+        n_of_routines (int): The number of routines to generate.
+        routines_folder (str): The folder where the generated routines will be saved.
+        short (bool): If True, the routines will be shorter (vehicle visits each place one time).
+    Returns:
+        None: The generated routines are saved to a CSV file in the specified folder.
+    """
+
     generated_routines = 0
     while (generated_routines < n_of_routines):
         try:
-            response = get_trip_carla(places)
+
+            # Generate a full routine where the vehicle can visit each place multiple times
+            response = get_trip_carla(places, short=short)
             # Getting a valid response from the LLM
-            while not response_check(response, places):
-                response = json.loads(get_trip_carla(places))
+            while not response_check(response, places, short=short):
+                response = json.loads(get_trip_carla(places, short=short))
 
             # Save the response to a CSV file
             save_response(response, generated_routines,

@@ -1,7 +1,7 @@
 {
   "veh_normal": {
     "veh_normal0": {
-      "distance_to_leading_vehicle": 17.33,
+      "distance_to_leading_vehicle": 2.5,
       "ignore_lights_percentage": 3.1,
       "ignore_signs_percentage": 2.24,
       "ignore_vehicles_percentage": 0.28,
@@ -12,7 +12,7 @@
       "probability": 0.5069099530952225
     },
     "veh_normal1": {
-      "distance_to_leading_vehicle": 24.24,
+      "distance_to_leading_vehicle": 2,
       "ignore_lights_percentage": 0.29,
       "ignore_signs_percentage": 3.74,
       "ignore_vehicles_percentage": 2.66,
@@ -25,7 +25,7 @@
   },
   "veh_aggressive": {
     "veh_aggressive0": {
-      "distance_to_leading_vehicle": 9.23,
+      "distance_to_leading_vehicle": 1,
       "ignore_lights_percentage": 24.51,
       "ignore_signs_percentage": 28.15,
       "ignore_vehicles_percentage": 17.25,
@@ -36,7 +36,7 @@
       "probability": 0.38876859382680995
     },
     "veh_aggressive1": {
-      "distance_to_leading_vehicle": 8.42,
+      "distance_to_leading_vehicle": 1.5,
       "ignore_lights_percentage": 34.28,
       "ignore_signs_percentage": 17.26,
       "ignore_vehicles_percentage": 16.29,

@@ -1,22 +1,22 @@
 {
   "aggressive": {
-    "distance_to_leading_vehicle": 10,
-    "ignore_lights_percentage": 10,
-    "ignore_signs_percentage": 10,
+    "distance_to_leading_vehicle": 1,
+    "ignore_lights_percentage": 100,
+    "ignore_signs_percentage": 20,
     "ignore_vehicles_percentage": 10,
-    "keep_slow_lane_rule_percentage": 10,
-    "random_left_lanechange_percentage": 10,
-    "random_right_lanechange_percentage": 10,
-    "vehicle_percentage_speed_difference": 10
+    "keep_slow_lane_rule_percentage": 0,
+    "random_left_lanechange_percentage": 20,
+    "random_right_lanechange_percentage": 20,
+    "vehicle_percentage_speed_difference": -15
   },
   "normal": {
-    "distance_to_leading_vehicle": 2,
-    "ignore_lights_percentage": 2,
-    "ignore_signs_percentage": 2,
-    "ignore_vehicles_percentage": 2,
-    "keep_slow_lane_rule_percentage": 2,
-    "random_left_lanechange_percentage": 2,
-    "random_right_lanechange_percentage": 2,
-    "vehicle_percentage_speed_difference": 2
+    "distance_to_leading_vehicle": 3,
+    "ignore_lights_percentage": 100,
+    "ignore_signs_percentage": 0,
+    "ignore_vehicles_percentage": 0,
+    "keep_slow_lane_rule_percentage": 30,
+    "random_left_lanechange_percentage": 5,
+    "random_right_lanechange_percentage": 5,
+    "vehicle_percentage_speed_difference": 20
   }
 }

@@ -389,10 +389,23 @@ def follow_route(client, vehicle_bp, sensors_bp, route_sps, agent_params, delta_
         spawn_vehicles_tm(client, world.get_blueprint_library().filter(
             'vehicle.*'), world.get_map().get_spawn_points(), n_vehicles=n_extra_vehicles, dtlv=5, psd=-0, hpm=True, hpr=50)
 
-    vehicle_done = False
     checkpoints_hit = 0
+    stuck_counter = 0
     try:
         while True:
+
+            # Checking if vehicle is stuck
+            velocity = vehicle.get_velocity()
+            speed = np.sqrt(velocity.x**2 + velocity.y**2 + velocity.z**2)
+            if speed < 0.1:
+                stuck_counter += 1
+                # If the vehicle is stuck for more than 20 seconds
+                if stuck_counter > (1 / delta_time) * 20:
+                    print(
+                        "Vehicle is stuck. Stopping this routine early, saving the data, and moving to the next one.")
+                    break
+            else:
+                stuck_counter = 0
 
             # Check if vehicle has reached its goal
             if goal_reached(vehicle, route_sps[checkpoints_hit + 1].location):
@@ -401,8 +414,8 @@ def follow_route(client, vehicle_bp, sensors_bp, route_sps, agent_params, delta_
                     break
 
                 else:
-                    print("Checkpoint reached!")
                     checkpoints_hit += 1
+                    print(f"Checkpoint {checkpoints_hit} reached!")
 
             # Update spectator position
             if fixed_spectator:
@@ -464,6 +477,7 @@ def run_simulation(client, sim_params, sps_routines, output_folder):
     end_times = []
     agent_params = sim_params['agent_params']
     for beh in agent_params.keys():
+        print(f"Performing {len(sps_routines)} routines for behavior: {beh}")
         for i, sps in enumerate(sps_routines):
             print(
                 f"\n------------------ ROUTINE {i} - BEHAVIOR: {beh} ---------------------------\n")
@@ -511,7 +525,7 @@ def run_simulation(client, sim_params, sps_routines, output_folder):
 
             except KeyboardInterrupt as e:
                 print(f"Simulation interrupted by user. Error: {e}")
-            break
+                break
 
     print("Simulation finished. All data saved to CSV files.")
 
