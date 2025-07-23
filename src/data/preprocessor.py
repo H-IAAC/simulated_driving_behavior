@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 
 def sliding_windows(data, window_size=7, step_size=1):
@@ -49,3 +50,17 @@ def one_hot_encode(column_vector, one_hot_keys):
             raise ValueError(f"Value {i} not found in one_hot_keys")
 
     return encoded_array
+
+
+def fill_synthetic_data(merged_data, percentage):
+
+    # This function fills the real data with synthetic data based on the percentage
+    # The real data is a DataFrame and the synthetic data is a DataFrame
+    # The output is a DataFrame with the same columns as the real data and the synthetic data
+    # The output is a DataFrame with the same number of rows as the real data
+    real_data = merged_data[merged_data['origin'] == 'real']
+    synth_data = merged_data[merged_data['origin'] == 'synth']
+
+    n_synth_samples = int(len(real_data) * percentage)
+
+    return pd.concat([real_data, synth_data.iloc[:n_synth_samples]], ignore_index=True).drop(columns=['origin'])
