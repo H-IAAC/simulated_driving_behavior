@@ -59,8 +59,13 @@ def fill_synthetic_data(merged_data, percentage):
     # The output is a DataFrame with the same columns as the real data and the synthetic data
     # The output is a DataFrame with the same number of rows as the real data
     real_data = merged_data[merged_data['origin'] == 'real']
-    synth_data = merged_data[merged_data['origin'] == 'synth']
+    synth_data_normal = merged_data[(merged_data['origin'] == 'synth') & (
+        merged_data['label'] == 'normal')]
+    synth_data_agg = merged_data[(merged_data['origin'] == 'synth') & (
+        merged_data['label'] == 'aggressive')]
 
     n_synth_samples = int(len(real_data) * percentage)
+    synth_data = pd.concat(
+        [synth_data_normal.iloc[:n_synth_samples//2], synth_data_agg.iloc[:n_synth_samples//2]], ignore_index=True)
 
-    return pd.concat([real_data, synth_data.iloc[:n_synth_samples]], ignore_index=True).drop(columns=['origin'])
+    return pd.concat([real_data, synth_data], ignore_index=True).drop(columns=['origin'])
