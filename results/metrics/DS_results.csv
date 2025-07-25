@@ -1,5 +1,5 @@
-key,model,f1_score_mean,f1_score_std,accuracy_mean,accuracy_std,recall_mean,recall_std,precision_mean,precision_std
-sumo_fixed,RFClassifier,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
-sumo_llm,RFClassifier,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
-carla_fixed,RFClassifier,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
-carla_llm,RFClassifier,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0
+key,model,f1_score_mean,f1_score_std,accuracy_mean,accuracy_std,recall_mean,recall_std,precision_mean,precision_std,params
+sumo_fixed,RFClassifier,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,{'default'}
+sumo_llm,RFClassifier,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,{'default'}
+carla_fixed,RFClassifier,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,{'default'}
+carla_llm,RFClassifier,1.0,0.0,1.0,0.0,1.0,0.0,1.0,0.0,{'default'}

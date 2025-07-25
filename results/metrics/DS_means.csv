@@ -1,5 +1,5 @@
-key,f1_score,accuracy,recall,precision
-sumo_fixed,1.0,1.0,1.0,1.0
-sumo_llm,1.0,1.0,1.0,1.0
-carla_fixed,1.0,1.0,1.0,1.0
-carla_llm,1.0,1.0,1.0,1.0
+key,f1_score,accuracy,recall,precision,model,params
+sumo_fixed,1.0,1.0,1.0,1.0,RFClassifier,{'default'}
+sumo_llm,1.0,1.0,1.0,1.0,RFClassifier,{'default'}
+carla_fixed,1.0,1.0,1.0,1.0,RFClassifier,{'default'}
+carla_llm,1.0,1.0,1.0,1.0,RFClassifier,{'default'}
