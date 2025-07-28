@@ -19,7 +19,7 @@ ANGLE = 67
 DEPATURE = 58
 
 
-def get_all_variables(folder_path, veh_ids, delta_time=0.05, end_hours=0, use_gui=False, convert_geo=True, freeze_traffic_lights=False):
+def get_all_variables(folder_path: str, veh_ids: list, delta_time: float = 0.05, end_hours: int = 0, use_gui: bool = False, convert_geo: bool = True, freeze_traffic_lights: bool = False) -> tuple:
     """Get all variables from the simulation.
     Args:
         folder_path (str): Path to the folder where the SUMO configuration file is located.
@@ -106,7 +106,7 @@ def get_all_variables(folder_path, veh_ids, delta_time=0.05, end_hours=0, use_gu
     return v_variables, (end_time - start_time)
 
 
-def save_data(veh_variables, data_folder_path, delta_time, exec_time, new_dir=False, verify=True, use_lat_lon=True, speed_threshold=6, acc_threshold=6, derivative_threshold=3):
+def save_data(veh_variables: dict, data_folder_path: str, delta_time: float, exec_time: float, new_dir: bool = False, verify: bool = True, use_lat_lon: bool = True, speed_threshold: float = 6, acc_threshold: float = 6, derivative_threshold: int = 3) -> None:
     """
     Saves the data from the simulation in a folder with the given name.
     Args:

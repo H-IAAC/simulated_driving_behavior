@@ -2,12 +2,18 @@ import numpy as np
 import pandas as pd
 
 
-def sliding_windows(data, window_size=7, step_size=1):
-    # This function returns the sliding windows and the labels for each window
-    # If output_3d is True, the output will be a 3D array, otherwise it will be a 2D array
-    # The 2D array is (num_samples, num_features), useful for ML and the 3D array is (num_samples, window_size/time_steps, num_features), useful for RNNs
-    # The difference is that the window is not flattened in the 3D array
-
+def sliding_windows(data: pd.DataFrame, window_size: int = 7, step_size: int = 1) -> tuple:
+    """    
+    This function generates sliding windows from the input data.
+    The data should be a pandas DataFrame with a 'label' column for classification tasks.
+    Args:
+        data (pd.DataFrame): Input data containing features and a 'label' column.
+        window_size (int): Size of the sliding window.
+        step_size (int): Step size for the sliding window.
+    Returns:
+        X (np.ndarray): 2D array of shape (num_samples, num_features)
+        y (np.ndarray): 1D array of labels corresponding to each window.
+    """
     X = []
     y = []
 
@@ -36,10 +42,17 @@ def sliding_windows(data, window_size=7, step_size=1):
     return np.array(X), np.array(y)
 
 
-def one_hot_encode(column_vector, one_hot_keys):
-    # This function takes a column vector and a dictionary of keys to one-hot encode the column
-    # The keys are the unique values in the column and the values are the one-hot encoded values
-    # The output is a 2D array with the one-hot encoded values
+def one_hot_encode(column_vector: np.ndarray, one_hot_keys: dict) -> np.ndarray:
+    """
+    This function one-hot encodes a column vector based on the provided keys.
+    The keys are expected to be a dictionary where the keys are the unique values in the column
+    and the values are the one-hot encoded values.
+    Args:
+        column_vector (pd.Series or np.ndarray): The column vector to be one-hot encoded.
+        one_hot_keys (dict): A dictionary mapping unique values to one-hot encoded values.
+    Returns:
+        np.ndarray: A 2D array with the one-hot encoded values.
+    """
     encoded_array = np.zeros(len(column_vector))
 
     # Iterate over the column vector and encode the values
@@ -52,12 +65,19 @@ def one_hot_encode(column_vector, one_hot_keys):
     return encoded_array
 
 
-def fill_synthetic_data(merged_data, percentage):
+def fill_synthetic_data(merged_data: pd.DataFrame, percentage: float) -> pd.DataFrame:
+    """
+    This function fills the real data with synthetic data based on the percentage.
+    The real data is a DataFrame and the synthetic data is a DataFrame.
+    The output is a DataFrame with the same columns as the real data and the synthetic data
+    The output is a DataFrame with the same number of rows as the real data.
+    Args:
+        merged_data (pd.DataFrame): DataFrame containing both real and synthetic data.
+        percentage (float): Percentage of synthetic data to be added to the real data.
+    Returns:
+        pd.DataFrame: DataFrame containing the real data and the synthetic data combined.
+    """
 
-    # This function fills the real data with synthetic data based on the percentage
-    # The real data is a DataFrame and the synthetic data is a DataFrame
-    # The output is a DataFrame with the same columns as the real data and the synthetic data
-    # The output is a DataFrame with the same number of rows as the real data
     real_data = merged_data[merged_data['origin'] == 'real']
     synth_data_normal = merged_data[(merged_data['origin'] == 'synth') & (
         merged_data['label'] == 'normal')]

@@ -227,7 +227,7 @@ def add_trip_xml(path: list, stop_durations: list[int], veh_id: int, veh_type: s
     return True
 
 
-def parse_veh_dist_xml(param_dict, vtypes_dist, styles, output_path, car_follow_model="IDM", lc_model="SL2015"):
+def parse_veh_dist_xml(param_dict: dict, vtypes_dist: dict, styles: list, output_path: str, car_follow_model: str = "IDM", lc_model: str = "SL2015") -> str:
     """
     Generates an XML file for vehicle type distributions based on the provided parameters and styles.
     Args:
@@ -266,15 +266,15 @@ def parse_veh_dist_xml(param_dict, vtypes_dist, styles, output_path, car_follow_
     return xml
 
 
-def parse_veh_fixed_xml(param_dict, styles, output_path, car_follow_model="IDM", lc_model="SL2015"):
+def parse_veh_fixed_xml(param_dict: dict, styles: list, output_path: str, car_follow_model: str = "IDM", lc_model: str = "SL2015"):
     """
     Generates an XML file for fixed vehicle types based on the provided parameters and styles.
     Args:
         param_dict (dict): Dictionary containing fixed parameters for each style.
         styles (list): List of styles for which the vehicle types are generated.
         output_path (str): Folder where the XML file will be saved.
-        car_follow_model (str): Car-following model to be used for the vehicle types.
-        lc_model (str): Lane change model to be used for the vehicle types.
+        car_follow_model (str): Car-following model to be used for the vehicle types. Default is "IDM".
+        lc_model (str): Lane change model to be used for the vehicle types. Default is "SL2015".
     Returns:
         xml (str): The generated XML string.
     """
@@ -303,7 +303,16 @@ def parse_veh_fixed_xml(param_dict, styles, output_path, car_follow_model="IDM",
     return xml
 
 
-def merge_routes(routine_routes_path, random_routes_path, output_file_path):
+def merge_routes(routine_routes_path: str, random_routes_path: str, output_file_path: str) -> None:
+    """
+    Merges the routine and random routes into a single routes file.
+    Args:
+        routine_routes_path (str): Path to the routine routes XML file.
+        random_routes_path (str): Path to the random routes XML file.
+        output_file_path (str): Path to save the merged routes XML file.
+    Returns:
+        None
+    """
 
     # Create the root <routes> element
     routes_root = ET.Element('routes')
@@ -344,10 +353,6 @@ def merge_routes(routine_routes_path, random_routes_path, output_file_path):
 
 
 def make_output_file(output_file_path, final_trips_file_path=None, random_trips_file_path=None) -> str:
-    # Creates the output file with the merged routes:
-    # if final_trips is not provided, only the random trips will be used
-    # if random_trips is not provided, only the final trips will be used
-    # if both are provided, they will be merged
     """
     Generates the output file with the merged routes. If you want to use the alternative routes, you can set final_trips_file_path to the alternative routes path.
     Args:
@@ -494,6 +499,15 @@ def save_routines_csv(location_time_list: list[dict], veh_ids: list, dir_path: s
 
 
 def save_ids_styles_csv(veh_ids: list[str], output_path: str):
+    """
+    Saves the vehicle IDs and their corresponding styles to a CSV file.
+    Args:
+        veh_ids (list): List of vehicle IDs.
+        output_path (str): Path to save the CSV file.
+    Returns:
+        None
+    """
+
     with open(output_path, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(['id', 'style'])

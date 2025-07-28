@@ -14,7 +14,6 @@ import scipy.stats as stats
 
 def imu_callback(data):
     """Callback function to handle IMU sensor data.
-
     Args:
         data: The IMU sensor data containing timestamp, accelerometer, gyroscope, and compass values.
     """
@@ -60,7 +59,6 @@ def set_attributes_imu(imu_bp, sensor_tick=None, acc_noise=0.000, gyro_std=0.000
 
 def gnss_callback(data):
     """Callback function to handle GNSS sensor data.
-
     Args:
         data: The GNSS sensor data containing timestamp, latitude, and longitude.
     """
@@ -78,7 +76,6 @@ def gnss_callback(data):
 
 def set_attributes_gnss(gnss_bp, sensor_tick=None, lat_bias=0, lat_sttdev=0, lon_bias=0, lon_stddev=0):
     """Set attributes for the GNSS sensor blueprint.
-
     Args:
         gnss_bp: The GNSS sensor blueprint.
         sensor_tick: Time in seconds between sensor captures (optional).
@@ -146,10 +143,8 @@ def spawn_vehicles_tm(client, vehicles_bp, spawn_points, n_vehicles, dtlv=5, psd
 
 def get_spawn_points_from_csv(csv_file):
     """Read spawn points from a CSV file and return them as a dictionary.
-
     Args:
         csv_file (str): Path to the CSV file containing spawn points.
-
     Returns:
         dict: A dictionary where keys are names and values are carla.Transform objects.
     """
@@ -169,7 +164,6 @@ def get_spawn_points_from_csv(csv_file):
 
 def destroy_all_vehicles(client):
     """Destroy all vehicles in the CARLA world.
-
     Args:
         client: CARLA client instance.
     """
@@ -209,11 +203,6 @@ def create_ego_vehicle(client, vehicle_bp, route_sps, draw_debug_route=True):
     Returns:
         vehicle: The spawned vehicle actor.
     """
-
-    # amap = client.get_world().get_map()
-    # grp = GlobalRoutePlanner(amap, sampling_res)
-    # # Create a global route planner and setting up car
-    # route = generate_route(grp, route_sps, draw_debug_route)
 
     tm = client.get_trafficmanager()
     # Important for carlaviz and for TM
@@ -282,7 +271,16 @@ def configure_tm_vehicle(tm, vehicle, config: dict):
             vehicle, config['vehicle_percentage_speed_difference'])
 
 
-def set_sync_mode(client, delta_time, render):
+def set_sync_mode(client, delta_time: float, render: bool):
+    """Set the CARLA world to synchronous mode with a fixed delta time.
+    Args:
+        client: CARLA client instance.
+        delta_time: Time step for the simulation (default is 0.05).
+        render: If True, rendering will be enabled (default is True).
+    Returns:
+        settings: The world settings after applying synchronous mode.
+    """
+
     world = client.get_world()
     tm = client.get_trafficmanager()
     settings = world.get_settings()
@@ -310,6 +308,14 @@ def set_freeze_traffic_lights(client):
 
 
 def set_up_sensors(client, sensors_bp, vehicle):
+    """Set up sensors for the vehicle in the CARLA world.
+    Args:
+        client: CARLA client instance.
+        sensors_bp: List of sensor blueprints to be attached to the vehicle.
+        vehicle: The vehicle actor to which the sensors will be attached.
+    Returns:
+        sensor_actors: List of spawned sensor actors.
+    """
 
     world = client.get_world()
     sensor_actors = []  # Hold references to sensor actors to prevent garbage collection
@@ -349,20 +355,21 @@ def goal_reached(vehicle, end_location, threshold=5):
     return distance < threshold
 
 
-def follow_route(client, vehicle_bp, sensors_bp, route_sps, agent_params, delta_time=0.01, freeze_traffic_lights=False, n_extra_vehicles=30, fixed_spectator=True, draw_debug_route=True, render=True):
+def follow_route(client, vehicle_bp, sensors_bp, route_sps: list, agent_params: dict, delta_time: float = 0.01, freeze_traffic_lights: bool = False, n_extra_vehicles: int = 30, fixed_spectator: bool = True, draw_debug_route: bool = True, render: bool = True) -> None:
     """
     Follow the route using the vehicle.
-
-    vehicle_bp: Blueprint of the vehicle to be spawned.
-    sensors_bp: List of sensor blueprints to be attached to the vehicle.
-    route_sps: List of spawn points to follow the route.
-    agent_params: Dictionary of parameters for the agent.
-    delta_time: Time step for the simulation (default is 0.05).
-    stop_time: How much time to stop at each waypoint (default is 0).
-    n_extra_vehicles: Number of vehicles to spawn (default is 30).
-    fixed_spectator: If True, the spectator will follow the vehicle (default is True).
-    draw_debug_route: If True, the route will be drawn in the world (default is True).
-    render: If True, rendering will be enabled (default is True).
+    Args:
+        client: CARLA client instance.
+        vehicle_bp: Blueprint of the vehicle to be spawned.
+        sensors_bp: List of sensor blueprints to be attached to the vehicle.
+        route_sps: List of spawn points to follow the route.
+        agent_params: Dictionary of parameters for the agent.
+        delta_time: Time step for the simulation (default is 0.05).
+        stop_time: How much time to stop at each waypoint (default is 0).
+        n_extra_vehicles: Number of vehicles to spawn (default is 30).
+        fixed_spectator: If True, the spectator will follow the vehicle (default is True).
+        draw_debug_route: If True, the route will be drawn in the world (default is True).
+        render: If True, rendering will be enabled (default is True).
     """
     world = client.get_world()
     # Set up spectator
@@ -440,7 +447,15 @@ def follow_route(client, vehicle_bp, sensors_bp, route_sps, agent_params, delta_
         world.apply_settings(settings)
 
 
-def save_data_to_csv(veh_id, imu_df, gnss_df, folder_path):
+def save_data_to_csv(veh_id: str, imu_df: pd.DataFrame, gnss_df: pd.DataFrame, folder_path: str) -> None:
+    """Save IMU and GNSS data to CSV files.
+    Args:
+        veh_id: Identifier for the vehicle.
+        imu_df: DataFrame containing IMU data.
+        gnss_df: DataFrame containing GNSS data.
+        folder_path: Path to the folder where the CSV files will be saved.
+    """
+
     whole_df = pd.DataFrame()
     whole_df = pd.merge(imu_df, gnss_df, on='timestamp',
                         how='outer', validate='one_to_one')[3:]
@@ -450,15 +465,14 @@ def save_data_to_csv(veh_id, imu_df, gnss_df, folder_path):
     whole_df.to_csv(f'{folder_path}/{veh_id}.csv', index=False)
 
 
-def run_simulation(client, sim_params, sps_routines, output_folder):
+def run_simulation(client, sim_params: dict, sps_routines: list, output_folder: str) -> None:
     """ Run the simulation with the specified parameters.
 
     Args:
-        veh_bp: Blueprint of the vehicle to be spawned.
-        sensor_bps: List of sensor blueprints to be attached to the vehicle.
-        sps_routines: List of spawn points to follow the route.
-        output_folder: Folder path to save the output data.
+        client: CARLA client instance.
         sim_params: Dictionary containing simulation parameters.
+            - vehicle_bp: Blueprint of the vehicle to be spawned.
+            - sensor_bps: List of sensor blueprints to be attached to the vehicle.
             - agent_params: Dictionary of parameters for the agent behaviors.
             - freeze_traffic_lights: If True, traffic lights will be frozen to green.
             - n_extra_vehicles: Number of extra vehicles to spawn in the simulation.
@@ -466,6 +480,8 @@ def run_simulation(client, sim_params, sps_routines, output_folder):
             - fixed_spectator: If True, the spectator will follow the vehicle.
             - draw_debug_route: If True, the route will be drawn in the world.
             - render: If True, rendering will be enabled.
+        sps_routines: List of routes to follow in the simulation.
+        output_folder: Folder where the simulation data will be saved.
 
     Description:
         This function runs the simulation by spawning vehicles, setting up sensors, and following the specified routes.

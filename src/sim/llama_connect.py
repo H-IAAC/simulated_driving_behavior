@@ -324,16 +324,25 @@ def verify_parameters(parameters_dict: dict, styles: list, separate_distribution
     print("Verification complete!")
 
 
-def save_response(response, generated_routines, routines_folder):
+def save_response(response: str, routine_id: int, routines_folder: str) -> None:
+    """ Saves the response from the LLAMA model to a CSV file.
+    Args:
+        response (str): The response from the LLAMA model in JSON format.
+        routine_id (int): The ID of the routine being saved.
+        routines_folder (str): The folder where the generated routines will be saved.
+    Returns:
+        None: The response is saved to a CSV file in the specified folder.
+    """
+
     if isinstance(response, str):
         response = json.loads(response)
     df = pd.DataFrame(response).T
     df.index.name = 'time'
     os.makedirs(routines_folder, exist_ok=True)
-    df.to_csv(f'{routines_folder}/llm_routine_{generated_routines}.csv')
+    df.to_csv(f'{routines_folder}/llm_routine_{routine_id}.csv')
 
 
-def generate_routines(places, n_of_routines, routines_folder, short=False):
+def generate_routines(places: list, n_of_routines: int, routines_folder: str, short: bool = False) -> None:
     """ Generates a number of routines using the LLAMA model and saves them to a CSV file
     Args:
         places (list): A list of places that the LLM can generate routines for.
