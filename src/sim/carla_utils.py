@@ -465,9 +465,8 @@ def save_data_to_csv(veh_id: str, imu_df: pd.DataFrame, gnss_df: pd.DataFrame, f
     whole_df.to_csv(f'{folder_path}/{veh_id}.csv', index=False)
 
 
-def run_simulation(client, sim_params: dict, sps_routines: list, output_folder: str) -> None:
+def run_simulation(client, sim_params: dict, sps_routines: list, output_folder: str, use_dists: bool = False) -> None:
     """ Run the simulation with the specified parameters.
-
     Args:
         client: CARLA client instance.
         sim_params: Dictionary containing simulation parameters.
@@ -481,6 +480,7 @@ def run_simulation(client, sim_params: dict, sps_routines: list, output_folder: 
             - draw_debug_route: If True, the route will be drawn in the world.
             - render: If True, rendering will be enabled.
         sps_routines: List of routes to follow in the simulation.
+        use_dists: Set true when there are multiple vehicle types for each behavior.
         output_folder: Folder where the simulation data will be saved.
 
     Description:
@@ -492,11 +492,25 @@ def run_simulation(client, sim_params: dict, sps_routines: list, output_folder: 
     """
     end_times = []
     agent_params = sim_params['agent_params']
+
     for beh in agent_params.keys():
+
+        if use_dists:  # If there are multiple vehicle types for each behavior, use one for each routine
+            v_types = list(agent_params[beh].keys())
+            if len(v_types) != len(sps_routines):
+                raise ValueError(
+                    f"Number of vehicle types ({len(v_types)}) does not match number of routines ({len(sps_routines)}) for behavior {beh}.")
+
         print(f"Performing {len(sps_routines)} routines for behavior: {beh}")
         for i, sps in enumerate(sps_routines):
+
+            agent_behavior = beh
+            if beh.startswith('veh_'):
+                agent_behavior = beh.split('_')[1]
+            id = f'veh_{i}_{agent_behavior}'
+
             print(
-                f"\n------------------ ROUTINE {i} - BEHAVIOR: {beh} ---------------------------\n")
+                f"\n------------------ VEHICLE {id} DEPARTED ---------------------------\n")
             try:
                 # timestamp: simulation time - s
                 # acc: m/s^2
@@ -510,8 +524,11 @@ def run_simulation(client, sim_params: dict, sps_routines: list, output_folder: 
                 gnss_df = pd.DataFrame(
                     columns=['timestamp', 'latitude', 'longitude'])
 
-                agent_behavior = beh
-                id = f'veh_{i}_{agent_behavior}'
+                if use_dists:
+                    current_agent_params = agent_params[beh][v_types[i]]
+                    print(f"Using vehicle type: {v_types[i]}")
+                else:
+                    current_agent_params = agent_params[beh]
 
                 start_time = _time.time()
                 # Here traffic lights are frozen to green in order to reduce simulation time
@@ -520,7 +537,7 @@ def run_simulation(client, sim_params: dict, sps_routines: list, output_folder: 
                     vehicle_bp=sim_params['vehicle_bp'],
                     sensors_bp=sim_params['sensor_bps'],
                     route_sps=sps,
-                    agent_params=agent_params[beh],
+                    agent_params=current_agent_params,
                     freeze_traffic_lights=sim_params['freeze_traffic_lights'],
                     n_extra_vehicles=sim_params['n_extra_vehicles'],
                     delta_time=sim_params['delta_time'],

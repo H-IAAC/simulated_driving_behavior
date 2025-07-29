@@ -1,5 +1,5 @@
 Parameter,Default,Range,Description
-distance_to_leading_vehicle,2.5,>= 0,Minimum distance in meters to the vehicle in front (front-to-back).
+distance_to_leading_vehicle,2.0,>= 0,Minimum distance in METERS to the vehicle in front. Aggressive vehicles tend to have values closer to 0.
 ignore_lights_percentage,0,[0-100],Percentage chance of ignoring traffic lights.
 ignore_signs_percentage,0,[0-100],Percentage chance of ignoring stop signs.
 ignore_vehicles_percentage,0,[0-100],Percentage chance of ignoring collisions with other vehicles.

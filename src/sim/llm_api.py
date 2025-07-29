@@ -20,11 +20,11 @@ client = Groq(
 
 def get_response(message: str) -> str:
     """
-    Generates a response from the LLAMA model using the Groq API.
+    Generates a response from the LLM model using the Groq API.
     Args:
-        message (str): The message to be sent to the LLAMA model.
+        message (str): The message to be sent to the LLM model.
     Returns:
-        str: The response from the LLAMA model.
+        str: The response from the LLM model.
     """
     instructions_content = (f"{message}"
                             )
@@ -36,7 +36,7 @@ def get_response(message: str) -> str:
     ]
 
     chat_completion = client.chat.completions.create(
-        messages=message, model="llama3-8b-8192")
+        messages=message, model="gemma2-9b-it")
 
     return chat_completion.choices[0].message.content
 
@@ -72,13 +72,13 @@ def get_trip_carla(places, short=False):
         ]
 
     chat_completion = client.chat.completions.create(
-        messages=message, model="llama3-8b-8192", temperature=1, response_format={"type": "json_object"})
+        messages=message, model="gemma2-9b-it", temperature=1, response_format={"type": "json_object"})
 
     return chat_completion.choices[0].message.content
 
 
 def get_trip_sumo(student_info: str, places: dict) -> str:
-    """ Generates a response for a student's daily routine trip using the LLAMA model.
+    """ Generates a response for a student's daily routine trip using the LLM model.
     Args:
         student_info (str): Information about the student, such as their field of study.
         places (dict): A dictionary containing various places categorized by their type, such as leisure,
@@ -113,7 +113,7 @@ def get_trip_sumo(student_info: str, places: dict) -> str:
         }
     ]
     chat_completion = client.chat.completions.create(
-        messages=message, model="llama3-8b-8192", temperature=1, response_format={"type": "json_object"})
+        messages=message, model="gemma2-9b-it", temperature=1, response_format={"type": "json_object"})
 
     return chat_completion.choices[0].message.content
 
@@ -152,7 +152,7 @@ def response_check(response: str, possible_locations: list, short: bool = False)
 
 
 def generate_response_trips(student_info: str, places: dict, number_of_trips: int = 5) -> List[str]:
-    """ Generates and verifies a list of responses for the student's daily routine trips using the LLAMA model.
+    """ Generates and verifies a list of responses for the student's daily routine trips using the LLM model.
     Args:
         student_info (str): Information about the student, such as their field of study.
         places (dict): A dictionary containing various places categorized by their type, such as leisure,
@@ -185,7 +185,7 @@ def generate_response_trips(student_info: str, places: dict, number_of_trips: in
 
 
 def generate_range_parameters(parameters: str, styles: List[str]) -> str:
-    """ Generates the range of parameters for the vehicle types using the LLAMA model.
+    """ Generates the range of parameters for the vehicle types using the LLM model.
     Args:
         parameters (str): A string containing the parameters to be used in the generation.
         styles (list): A list of styles for which the parameters will be generated.
@@ -198,7 +198,7 @@ def generate_range_parameters(parameters: str, styles: List[str]) -> str:
     message = [
         {
             "role": "system",
-            "content": "You need to return range of values in JSON for every one of the parameters that represent how a driver behaves in traffic, give an explanation for why you picked each value. Following, there is a list of parameter, default value, range [minimum-maximum] and description:\n {parameters}.\nThe more aggressive a driver is, the less they tend to cooperate in traffic and the more selfish they are. ALWAYS BE INSIDE THE RANGE LIMIT. Consider the default value for each parameter as a basis for a normal driver. Consider the answers you gave to the previous parameters when giving your answer. One parameter range of values must not be a subrange of any other parameter range, meaning you should not give overlap the range of other styles, if a aggressive style is given 'min': 0.2 and max: '0.5' for some paramter, another style can not have 'min':0.3, 'max':0.4' for this same paramters, because the ranges overlap each other. Keep the same distance between min and max for every style for each parameter. ALL THE PARAMETERS PROVIDED and BE ALWAYS IN THE SAME FOLLOWING FORMAT containing the parameter name, the style, the min and max values and the reason you picked those values. Note that every parameter has the same JSON structure that may NOT be changed. ALWAYS BE INSIDE THE RANGE LIMIT. PARAMETERS WITH ARE FACTORS WILL ALWAYS BE BETWEEN 0 AND 1. Example of proper JSON: {{'parameter': {{'style': {{'explanation': 'string', 'min': value, 'max': value}}}}}}. For example, if the styles are aggressive and normal: {{'lcCooperative': {{'aggressive': {{'explanation': 'aggresive drivers are not very cooperative', 'min': 0.2, 'max': 0.5}}, 'normal': {{'explanation': 'normal drivers are cooperative', 'min': 0.5, 'max': 0.8}}}}}}.".format(parameters=parameters)
+            "content": "You are a specialist in driver behavior and know everything about traffic statistics. You need to return range of values in JSON for every one of the parameters that represent how a driver behaves in traffic, give an explanation for why you picked each value. Following, there is a list of parameter, default value, range [minimum-maximum] and description:\n {parameters}.\nThe more aggressive a driver is, the less they tend to cooperate in traffic and the more selfish they are, they tend to drive closer to the car in front (less than 2 meters), drive faster and change lanes more frequently. ALWAYS BE INSIDE THE RANGE LIMIT. Consider the Default value for each parameter as a basis for a normal driver. Consider the answers you gave to the previous parameters when giving your answer. One parameter range of values must not be a subrange of any other parameter range, meaning you should not give overlap the range of other styles, if a aggressive style is given 'min': 0.2 and max: '0.5' for some paramter, another style can not have 'min':0.3, 'max':0.4' for this same paramters, because the ranges overlap each other. Keep the same distance between min and max for every style for each parameter. ALL THE PARAMETERS PROVIDED and BE ALWAYS IN THE SAME FOLLOWING FORMAT containing the parameter name, the style, the min and max values and the reason you picked those values. Note that every parameter has the same JSON structure that may NOT be changed. ALWAYS BE INSIDE THE RANGE LIMIT. PARAMETERS WITH ARE FACTORS WILL ALWAYS BE BETWEEN 0 AND 1. Example of proper JSON: {{'parameter': {{'style': {{'explanation': 'string', 'min': value, 'max': value}}}}}}. For example, if the styles are aggressive and normal: {{'distance_to_leading_vehicle': {{'aggressive': {{'explanation': 'aggresive drivers tend to drive closer to the vehicle in front', 'min': 0.5, 'max': 2}}, 'normal': {{'explanation': 'normal drivers drive at a safer distance', 'min': 2, 'max': 3}}}}}}.".format(parameters=parameters)
         },
         {
             "role": "user",
@@ -207,7 +207,7 @@ def generate_range_parameters(parameters: str, styles: List[str]) -> str:
     ]
     try:
         chat_completion = client.chat.completions.create(
-            messages=message, model="llama3-8b-8192", temperature=0.5, response_format={"type": "json_object"})
+            messages=message, model="gemma2-9b-it", temperature=0.5, response_format={"type": "json_object"})
 
     except Exception as e:
         print(f"Error generating response {e}. Trying a new one.")
@@ -217,7 +217,7 @@ def generate_range_parameters(parameters: str, styles: List[str]) -> str:
 
 
 def get_range_parameters(data: DataFrame, params: str, styles: List[str]) -> dict:
-    """ Generates the range of parameters for the vehicles using the LLAMA model.
+    """ Generates the range of parameters for the vehicles using the LLM model.
     Args:
         data (pd.DataFrame): A DataFrame containing the parameters to be used in the generation.
         params (str): A string containing the parameters to be used in the generation.
@@ -245,7 +245,7 @@ def get_range_parameters(data: DataFrame, params: str, styles: List[str]) -> dic
 
 
 def verify_parameters(parameters_dict: dict, styles: list, separate_distributions: bool = False):
-    """ Verifies the parameters generated by the LLAMA model to ensure they are within valid ranges and do not overlap. If they do, they are adjusted directly in the dictionary.
+    """ Verifies the parameters generated by the LLM model to ensure they are within valid ranges and do not overlap. If they do, they are adjusted directly in the dictionary.
     Args:
         parameters_dict (dict): A dictionary containing the parameters and their ranges for each style.
         styles (list): A list of styles for which the parameters are defined.
@@ -325,9 +325,9 @@ def verify_parameters(parameters_dict: dict, styles: list, separate_distribution
 
 
 def save_response(response: str, routine_id: int, routines_folder: str) -> None:
-    """ Saves the response from the LLAMA model to a CSV file.
+    """ Saves the response from the LLM model to a CSV file.
     Args:
-        response (str): The response from the LLAMA model in JSON format.
+        response (str): The response from the LLM model in JSON format.
         routine_id (int): The ID of the routine being saved.
         routines_folder (str): The folder where the generated routines will be saved.
     Returns:
@@ -343,7 +343,7 @@ def save_response(response: str, routine_id: int, routines_folder: str) -> None:
 
 
 def generate_routines(places: list, n_of_routines: int, routines_folder: str, short: bool = False) -> None:
-    """ Generates a number of routines using the LLAMA model and saves them to a CSV file
+    """ Generates a number of routines using the LLM model and saves them to a CSV file
     Args:
         places (list): A list of places that the LLM can generate routines for.
         n_of_routines (int): The number of routines to generate.

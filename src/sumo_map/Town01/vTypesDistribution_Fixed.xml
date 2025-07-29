@@ -1,13 +1,13 @@
 <root>
 <vTypeDistribution id="normal">
-	<vType id="veh_normal" carFollowModel="EIDM" laneChangeModel="SL2015" maxSpeed="13.88888888888889" accel="2.5" decel="4.5" speedFactor="1.0" emergencyDecel="9.0" vClass="passenger" probability="1.0">
+	<vType id="veh_normal" carFollowModel="EIDM" laneChangeModel="SL2015" maxSpeed="200" accel="2.6" decel="4.5" speedFactor="1.0" minGap="2.5" emergencyDecel="9.0" vClass="passenger" probability="1.0">
 		<param key="device.rerouting.probability" value="1.0"/>
 		<param key="device.rerouting.adaptation-steps" value="18"/>
 		<param key="device.rerouting.adaptation-interval" value="10"/>
 	</vType>
 </vTypeDistribution>
 <vTypeDistribution id="aggressive">
-	<vType id="veh_aggressive" carFollowModel="EIDM" laneChangeModel="SL2015" maxSpeed="19.444444444444443" accel="3.0" decel="5.0" speedFactor="1.2" emergencyDecel="10.0" vClass="passenger" probability="1.0">
+	<vType id="veh_aggressive" carFollowModel="EIDM" laneChangeModel="SL2015" maxSpeed="250" accel="3.5" decel="5.5" speedFactor="1.2" minGap="1.0" emergencyDecel="10.0" vClass="passenger" probability="1.0">
 		<param key="device.rerouting.probability" value="1.0"/>
 		<param key="device.rerouting.adaptation-steps" value="18"/>
 		<param key="device.rerouting.adaptation-interval" value="10"/>

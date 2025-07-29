@@ -1,14 +1,15 @@
 time,location,activity
 7,home,wake up
-8,school,class
-9,cafe,break
-10,restaurant,lunch
-11,university,lecture
-12,gym,workout
-13,work,work
-14,theater,show
+8,school,study
+9,school,attend class
+10,cafe,lunch
+11,university,attend lecture
+12,restaurant,lunch
+13,gym,workout
+14,theater,watch movie
 15,bar,relax
-16,work,work
-17,gym,workout
-18,home,dinner
-19,home,relax
+16,work,job
+17,home,dinner
+18,home,rest
+19,home,leisure
+20,home,sleep

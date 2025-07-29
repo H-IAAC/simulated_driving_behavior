@@ -1,0 +1,98 @@
+{
+  "distance_to_leading_vehicle": {
+    "normal": {
+      "explanation": "normal drivers drive at a safer distance",
+      "min": 2,
+      "max": 3
+    },
+    "aggressive": {
+      "explanation": "aggresive drivers tend to drive closer to the vehicle in front",
+      "min": 0.5,
+      "max": 2
+    }
+  },
+  "ignore_lights_percentage": {
+    "normal": {
+      "explanation": "normal drivers obey traffic lights",
+      "min": 0,
+      "max": 5
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are more likely to ignore traffic lights",
+      "min": 5,
+      "max": 20
+    }
+  },
+  "ignore_signs_percentage": {
+    "normal": {
+      "explanation": "normal drivers obey stop signs",
+      "min": 0,
+      "max": 2
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are more likely to ignore stop signs",
+      "min": 2,
+      "max": 10
+    }
+  },
+  "ignore_vehicles_percentage": {
+    "normal": {
+      "explanation": "normal drivers avoid collisions",
+      "min": 0,
+      "max": 1
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are more likely to ignore other vehicles",
+      "min": 1,
+      "max": 5
+    }
+  },
+  "keep_slow_lane_rule_percentage": {
+    "normal": {
+      "explanation": "normal drivers tend to stay in the slow lane unless necessary",
+      "min": 70,
+      "max": 90
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers are more likely to overtake",
+      "min": 30,
+      "max": 50
+    }
+  },
+  "random_left_lanechange_percentage": {
+    "normal": {
+      "explanation": "normal drivers change lanes less frequently",
+      "min": 5,
+      "max": 15
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers change lanes more frequently",
+      "min": 15,
+      "max": 30
+    }
+  },
+  "random_right_lanechange_percentage": {
+    "normal": {
+      "explanation": "normal drivers change lanes less frequently",
+      "min": 5,
+      "max": 15
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers change lanes more frequently",
+      "min": 15,
+      "max": 30
+    }
+  },
+  "vehicle_percentage_speed_difference": {
+    "normal": {
+      "explanation": "normal drivers tend to drive at or slightly below the speed limit",
+      "min": 0,
+      "max": 5
+    },
+    "aggressive": {
+      "explanation": "aggressive drivers tend to drive faster than the speed limit",
+      "min": -5,
+      "max": 10
+    }
+  }
+}

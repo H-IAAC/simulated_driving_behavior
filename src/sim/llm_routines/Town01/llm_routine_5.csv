@@ -2,14 +2,14 @@ time,location,activity
 7,home,wake up
 8,school,study
 9,restaurant,lunch
-10,cafe,coffee break
-11,gym,workout
-12,university,classes
-13,theater,relaxation
-14,bar,hanging out
-15,work,work
-16,school,study
+10,gym,workout
+11,university,lectures
+12,cafe,break
+13,work,job
+14,theater,performance
+15,bar,hanging out
+16,work,job
 17,home,dinner
-18,home,rest day
-19,home,relaxation
+18,theater,watch movie
+19,home,relax
 20,home,sleep

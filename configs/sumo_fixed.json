@@ -1,17 +1,19 @@
 {
   "aggressive": {
-    "maxSpeed": 19.444444444444443,
-    "accel": 3.0,
-    "decel": 5.0,
+    "maxSpeed": 250,
+    "accel": 3.5,
+    "decel": 5.5,
     "speedFactor": 1.2,
+    "minGap": 1.0,
     "emergencyDecel": 10.0,
     "vClass": "passenger"
   },
   "normal": {
-    "maxSpeed": 13.88888888888889,
-    "accel": 2.5,
+    "maxSpeed": 200,
+    "accel": 2.6,
     "decel": 4.5,
     "speedFactor": 1.0,
+    "minGap": 2.5,
     "emergencyDecel": 9.0,
     "vClass": "passenger"
   }
