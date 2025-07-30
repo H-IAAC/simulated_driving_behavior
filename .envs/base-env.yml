@@ -1,0 +1,5 @@
+name: base-env
+channels:
+  - https://repo.anaconda.com/pkgs/main
+  - https://repo.anaconda.com/pkgs/r
+prefix: /home/renan/miniconda3/envs/base-env
