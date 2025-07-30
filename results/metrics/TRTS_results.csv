@@ -1,5 +1,5 @@
 key,model,f1_score_mean,f1_score_std,accuracy_mean,accuracy_std,recall_mean,recall_std,precision_mean,precision_std,params
-sumo_fixed,XGBClassifier,0.47254594910010395,0.0,0.49642063139172965,0.0,0.49642063139172965,0.0,0.49958993962219106,0.0,"{'learning_rate': 0.001, 'max_depth': 10, 'n_estimators': 1000}"
-sumo_llm,RFClassifier,0.48305491573328035,0.004303718626474998,0.5224515630804121,0.0018868079213732332,0.5224515630804121,0.0018868079213732332,0.5105231382912485,0.002848463191684503,"{'max_depth': 10, 'n_estimators': 50}"
-carla_fixed,XGBClassifier,0.5261354373470896,0.0,0.5264158450859897,0.0,0.5264158450859897,0.0,0.5258692549180152,0.0,"{'learning_rate': 0.2, 'max_depth': 5, 'n_estimators': 700}"
-carla_llm,XGBClassifier,0.5194390536550584,0.0,0.5201054713249835,0.0,0.5201054713249835,0.0,0.5287481027976826,0.0,"{'learning_rate': 0.3, 'max_depth': 5, 'n_estimators': 500}"
+sumo_fixed,XGBClassifier,0.502739604758718,0.0,0.505795210316242,0.0,0.505795210316242,0.0,0.5027001938019664,0.0,"{'colsample_bytree': 0.5, 'learning_rate': 0.1, 'max_depth': None, 'n_estimators': 200, 'subsample': 0.7}"
+sumo_llm,XGBClassifier,0.5426947484521164,0.0,0.5505011784081552,0.0,0.5505011784081552,0.0,0.5420558499536514,0.0,"{'colsample_bytree': 1.0, 'learning_rate': 0.1, 'max_depth': None, 'n_estimators': 1000, 'subsample': 0.7}"
+carla_fixed,XGBClassifier,0.4331910871073824,0.0,0.5861303270988129,0.0,0.5861303270988129,0.0,0.34354876034496135,0.0,"{'colsample_bytree': 1.0, 'learning_rate': 0.001, 'max_depth': 5, 'n_estimators': 200, 'subsample': 0.7}"
+carla_llm,XGBClassifier,0.4996436326093469,0.0,0.4997525773195876,0.0,0.4997525773195876,0.0,0.4997661715022052,0.0,"{'colsample_bytree': 1.0, 'learning_rate': 0.3, 'max_depth': 5, 'n_estimators': 700, 'subsample': 0.5}"
