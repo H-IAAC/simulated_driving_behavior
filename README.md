@@ -1,13 +1,32 @@
-# Driver Behavior Classification using SUMO and CARLA Simulations
+# `Driver Behavior Classification using SUMO and CARLA Simulations`
 
 This project uses synthetic driving data generated via **SUMO** and **CARLA** simulators to augment **UAH-DriveSet** and classify driver behavior (e.g., *aggressive*, *normal*). Multiple simulation configurations are used to augment the data and train robust machine learning models. The repository includes simulation tools, data processing pipelines, and evaluation notebooks.
 
-It is related to a published work that can be found at:
+This project was developed as part of the Cognitive Architectures research line from 
+the Hub for Artificial Intelligence and Cognitive Architectures (H.IAAC) of the State University of Campinas (UNICAMP).
+See more projects from the group [here](https://github.com/brgsil/RepoOrganizer).
 
+[![](https://img.shields.io/badge/-H.IAAC-eb901a?style=for-the-badge&labelColor=black)](https://hiaac.unicamp.br/)
+[![](https://img.shields.io/badge/-Arq.Cog-black?style=for-the-badge&labelColor=white&logo=data:image/svg%2bxml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4gPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1Ni4wMDQiIGhlaWdodD0iNTYiIHZpZXdCb3g9IjAgMCA1Ni4wMDQgNTYiPjxwYXRoIGlkPSJhcnFjb2ctMiIgZD0iTTk1NS43NzQsMjc0LjJhNi41Nyw2LjU3LDAsMCwxLTYuNTItNmwtLjA5MS0xLjE0NS04LjEtMi41LS42ODksMS4xMjNhNi41NCw2LjU0LDAsMCwxLTExLjEzNi4wMjEsNi41Niw2LjU2LDAsMCwxLDEuMzY4LTguNDQxbC44LS42NjUtMi4xNS05LjQ5MS0xLjIxNy0uMTJhNi42NTUsNi42NTUsMCwwLDEtMi41OS0uODIyLDYuNTI4LDYuNTI4LDAsMCwxLTIuNDQzLTguOSw2LjU1Niw2LjU1NiwwLDAsMSw1LjctMy4zLDYuNDU2LDYuNDU2LDAsMCwxLDIuNDU4LjQ4M2wxLC40MSw2Ljg2Ny02LjM2Ni0uNDg4LTEuMTA3YTYuNTMsNi41MywwLDAsMSw1Ljk3OC05LjE3Niw2LjU3NSw2LjU3NSwwLDAsMSw2LjUxOCw2LjAxNmwuMDkyLDEuMTQ1LDguMDg3LDIuNS42ODktMS4xMjJhNi41MzUsNi41MzUsMCwxLDEsOS4yODksOC43ODZsLS45NDcuNjUyLDIuMDk1LDkuMjE4LDEuMzQzLjAxM2E2LjUwNyw2LjUwNywwLDAsMSw1LjYwOSw5LjcyMSw2LjU2MSw2LjU2MSwwLDAsMS01LjcsMy4zMWgwYTYuNCw2LjQsMCwwLDEtMi45ODctLjczMmwtMS4wNjEtLjU1LTYuNjgsNi4xOTIuNjM0LDEuMTU5YTYuNTM1LDYuNTM1LDAsMCwxLTUuNzI1LDkuNjkxWm0wLTExLjQ2MWE0Ljk1LDQuOTUsMCwxLDAsNC45NTIsNC45NUE0Ljk1Nyw0Ljk1NywwLDAsMCw5NTUuNzc0LDI2Mi43MzlaTTkzNC44LDI1Ny4zMjVhNC45NTIsNC45NTIsMCwxLDAsNC4yMjEsMi4zNDVBNC45Myw0LjkzLDAsMCwwLDkzNC44LDI1Ny4zMjVabS0uMDIyLTEuNThhNi41MTQsNi41MTQsMCwwLDEsNi41NDksNi4xTDk0MS40LDI2M2w4LjA2MSwyLjUuNjg0LTEuMTQ1YTYuNTkxLDYuNTkxLDAsMCwxLDUuNjI0LTMuMjA2LDYuNDQ4LDYuNDQ4LDAsMCwxLDIuODQ0LjY1bDEuMDQ5LjUxOSw2LjczNC02LjI1MS0uNTkzLTEuMTQ1YTYuNTI1LDYuNTI1LDAsMCwxLC4xMTUtNi4yMjksNi42MTgsNi42MTgsMCwwLDEsMS45NjYtMi4xMzRsLjk0NC0uNjUyLTIuMDkzLTkuMjIyLTEuMzM2LS4wMThhNi41MjEsNi41MjEsMCwwLDEtNi40MjktNi4xbC0uMDc3LTEuMTY1LTguMDc0LTIuNS0uNjg0LDEuMTQ4YTYuNTM0LDYuNTM0LDAsMCwxLTguOTY2LDIuMjY0bC0xLjA5MS0uNjUyLTYuNjE3LDYuMTMxLjc1MSwxLjE5MmE2LjUxOCw2LjUxOCwwLDAsMS0yLjMsOS4xNjRsLTEuMS42MTksMi4wNiw5LjA4NywxLjQ1MS0uMUM5MzQuNDc1LDI1NS43NSw5MzQuNjI2LDI1NS43NDQsOTM0Ljc3OSwyNTUuNzQ0Wm0zNi44NDQtOC43NjJhNC45NzcsNC45NzcsMCwwLDAtNC4zMTYsMi41LDQuODg5LDQuODg5LDAsMCwwLS40NjQsMy43NjIsNC45NDgsNC45NDgsMCwxLDAsNC43NzktNi4yNjZaTTkyOC43LDIzNS41MzNhNC45NzksNC45NzksMCwwLDAtNC4zMTcsMi41LDQuOTQ4LDQuOTQ4LDAsMCwwLDQuMjkxLDcuMzkxLDQuOTc1LDQuOTc1LDAsMCwwLDQuMzE2LTIuNSw0Ljg4Miw0Ljg4MiwwLDAsMCwuNDY0LTMuNzYxLDQuOTQsNC45NCwwLDAsMC00Ljc1NC0zLjYzWm0zNi43NzYtMTAuMzQ2YTQuOTUsNC45NSwwLDEsMCw0LjIyMiwyLjM0NUE0LjkyMyw0LjkyMywwLDAsMCw5NjUuNDc5LDIyNS4xODdabS0yMC45NTItNS40MTVhNC45NTEsNC45NTEsMCwxLDAsNC45NTEsNC45NTFBNC45NTcsNC45NTcsMCwwLDAsOTQ0LjUyNywyMTkuNzcyWiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTkyMi4xNDMgLTIxOC4yKSIgZmlsbD0iIzgzMDNmZiI+PC9wYXRoPjwvc3ZnPiA=)](https://github.com/brgsil/RepoOrganizer)
+
+## Objective
+
+Provide tools to generate synthetic data from SUMO and CARLA with easily adjustable parameters for Driver Behavior Classification, as well as evaluation methods to analyse the quality of the data generated. 
+
+1. **Synthetic Data Generation**
+   - Generate trajectories using:
+     - CARLA Traffic Manager with various configurations.
+     - SUMO vehicles with various configurations.
+
+2. **Data Evaluation**
+   - Merge synthetic datasets with real-world dataset. In this case, UAH-DriveSet.
+   - _Train on Real, Test on Synth (TRTS)_: Uses UAH-DrivesSet data for training and synthetic data for validation. We trained RF, SVC and XGB models with hyperparameter sweep. Good performance on this test indicate realism and utility of the data, since the knowledge obtained from real data is applicable to the synthetic data.
+    - _Discriminative Score (DS)_: Uses a merge of real and synthetic data, labeled as real or synthetic, for training and validation. Only the RF model was used in this test, since it got an ideal performance, but it should be easy to use any other models. A good performance in this task indicates that the real data is easily distinguishable from the synthetic data, measuring its realism.
+    - _Predictive Score (PS)_: Uses real data augmented with synthetic data for training and real data for validation. RF, SVC, and XGB models were trained, using hyperparameter sweep, for 20\%, 60\% and 100\% synthetic data augmentations. In case the models trained with augmented data show a better performance than those trained on real data only, the synthetic data have utility and coherence.
+    _t-SNE Visualization_: t-SNE projection allows us to verify the realism and diversity of the data. If there is a large intersection between real and synthetic data in the projection, we are able to suppose the synthetic data has good realism and diversity.
 ---
 
-## 🚦 Project Structure
-
+## Repository Structure
 ```
 driver-behavior-simulation/
 ├── data/ # All datasets
@@ -58,50 +77,32 @@ driver-behavior-simulation/
 └── .gitignore
 ```
 
-## 📊 Objective
+## Dependencies / Requirements
 
-Provide tools to generate synthetic data from SUMO and CARLA with easily adjustable parameters for Driver Behavior Classification, as well as evaluation methods to analyse the quality of the data generated. 
+### Simulators Set-Up
 
-1. **Synthetic Data Generation**
-   - Generate trajectories using:
-     - CARLA Traffic Manager with various configurations.
-     - SUMO vehicles with various configurations.
+**Groq Key**: We are using Groq to connect to the `gemma2-9b-it model`, as shown below, meaning you must set an environment variable called `"GROQ_API_KEY"` to be able to make LLM requests. The key is free and you can get one at [this link](https://console.groq.com/keys).
 
-2. **Data Evaluation**
-   - Merge synthetic datasets with real-world dataset. In this case, UAH-DriveSet.
-   - _Train on Real, Test on Synth (TRTS)_: Uses UAH-DrivesSet data for training and synthetic data for validation. We trained RF, SVC and XGB models with hyperparameter sweep. Good performance on this test indicate realism and utility of the data, since the knowledge obtained from real data is applicable to the synthetic data.
-    - _Discriminative Score (DS)_: Uses a merge of real and synthetic data, labeled as real or synthetic, for training and validation. Only the RF model was used in this test, since it got an ideal performance, but it should be easy to use any other models. A good performance in this task indicates that the real data is easily distinguishable from the synthetic data, measuring its realism.
-    - _Predictive Score (PS)_: Uses real data augmented with synthetic data for training and real data for validation. RF, SVC, and XGB models were trained, using hyperparameter sweep, for 20\%, 60\% and 100\% synthetic data augmentations. In case the models trained with augmented data show a better performance than those trained on real data only, the synthetic data have utility and coherence.
-    _t-SNE Visualization_: t-SNE projection allows us to verify the realism and diversity of the data. If there is a large intersection between real and synthetic data in the projection, we are able to suppose the synthetic data has good realism and diversity.
----
+```
+client = Groq(
+    # Initialize the Groq client with the API key from environment variables
+    # Ensure that the environment variable GROQ_API_KEY is set with your Groq API key
+    # You can set this in your terminal or in a .env file
+    api_key=os.getenv("GROQ_API_KEY"),
+)
+```
+**CARLA Simulator Install**: CARLA simulator must be downloaded and installed. This can be done following [this tutorial](https://carla.readthedocs.io/en/latest/start_quickstart/).
 
-## Results
+**SUMO Simulator Install**: SUMO simulator must also be installed. Follow [this tutorial](https://sumo.dlr.de/docs/Installing/index.html).
 
-The full results and explanations can be found at the published article related to this experiment, the values obtained from the tests are as follows:
+### UAH-Driveset Data
 
-### TRTS results
+We do not have the license to provide UAH-DriveSet in the repository. It must be downloaded from [this link](http://www.robesafe.uah.es/personal/eduardo.romera/uah-driveset/) and placed under the `data` folder interely. After this, you should have `data/base/UAH-DRIVESET-v1`.
+> Descrição do passo-a-passo para instalação de bibliotecas, softwares e demais ferramentas
+> ncessárias para execução do projeto antes de se clonar o repositório, assim como possíveis
+> requesitos mínimos para o projeto (processador, gpu, compilador, etc).
 
-Results of TRTS for the best models. None of the models trained on real data had good performance on synthetic data, indicating they are not realist and have low utility. The best model was XGB for all the datasets.
-
-<img width="600" height="150" alt="image" src="https://github.com/user-attachments/assets/e5d262ac-1efa-470d-8e75-e7930581af54" />
-
-### Predictive Score (PS) results
-
-Results of PS for the best models. Sulfixes `fixed` and `llm` indicate the source of the parameters. Sulfixed 20, 60 and 100 indicate the percentage of synthetic data when data augmentation was used. The best performance was that of the model which did not receive any synthetic data. Best model: ⋆ RF; † XGB; ◇ SVC
-
-<img width="600" height="400" alt="image" src="https://github.com/user-attachments/assets/e1e54ef6-0aa5-4daf-9e8e-53652e996e96" />
-
-### Discriminative Score (DS) results
-
-Results of DS for the best models. All models are Random Forests and got perfect accuracy, meaning the real and synthetic data are easily distinguishable.
-
-<img width="600" height="150" alt="image" src="https://github.com/user-attachments/assets/b47b60bb-4c78-4938-928a-f61e53a0cd07" />
-
-### tSNE projections
-
-<img width="600" height="500" src=results/figures/tsne/tsne_results.png />
-
-## 🛠️ Usage
+## Installation / Usage
 
 First, clone the repo and install the requirenments (either recreating the conda environments or installing the requirements) as follows:
 ```bash
@@ -125,26 +126,6 @@ All the noteooks can be found at the `notebooks` folder.
 In order to run the entire experiment, one must start with the CARLA data generation step, where routines for the map are generated.
 
 If you want to use another map, you must add the SUMO map files (basically the .sumocfg and .net files) under the `src/sumo_map` folder, where the `Town01` and `Town05` folders can be found, and provide the interest points in CARLA (they can be set using the `src/sim/carla_interest_point_setter.ipynb` notebook). Every notebook has a variable `FOLDER_NAME` or `town` in the first cell that is used to indicate what is the map being used. `Town01` and `Town05` files converted from CARLA can be found at the CARLA repository, under the co-simulation examples, and although both are provided in this repository, only `Town01` was used in the experiment.
-
-### Simulators Set-Up
-
-**Groq Key**: We are using Groq to connect to the `gemma2-9b-it model`, as shown below, meaning you must set an environment variable called `"GROQ_API_KEY"` to be able to make LLM requests. The key is free and you can get one at [this link](https://console.groq.com/keys).
-
-```
-client = Groq(
-    # Initialize the Groq client with the API key from environment variables
-    # Ensure that the environment variable GROQ_API_KEY is set with your Groq API key
-    # You can set this in your terminal or in a .env file
-    api_key=os.getenv("GROQ_API_KEY"),
-)
-```
-**CARLA Simulator Install**: CARLA simulator must be downloaded and installed. This can be done following [this tutorial](https://carla.readthedocs.io/en/latest/start_quickstart/).
-
-**SUMO Simulator Install**: SUMO simulator must also be installed. Follow [this tutorial](https://sumo.dlr.de/docs/Installing/index.html).
-
-### UAH-Driveset Data
-
-We do not have the license to provide UAH-DriveSet in the repository. It must be downloaded from [this link](http://www.robesafe.uah.es/personal/eduardo.romera/uah-driveset/) and placed under the `data` folder interely. After this, you should have `data/base/UAH-DRIVESET-v1`.
 
 ### Parameters Configuration
 
@@ -198,8 +179,50 @@ Here, you may use the `base-env`, available at the envs folder.
 
 This notebook is used solely to show the results of each test in a simple and clean manner. It displays the tables for TRTS, PS and DS, and shows the tSNE plots for each dataset.
 
-### Figures
+## Results
 
-Some notebooks generate figures, such as the tSNE results. They are all stored under `results/figures`.
+The full results and explanations can be found at the published article related to this experiment, the values obtained from the tests are as follows:
+
+### TRTS results
+
+Results of TRTS for the best models. None of the models trained on real data had good performance on synthetic data, indicating they are not realist and have low utility. The best model was XGB for all the datasets.
+
+<img width="600" height="150" alt="image" src="https://github.com/user-attachments/assets/e5d262ac-1efa-470d-8e75-e7930581af54" />
+
+### Predictive Score (PS) results
+
+Results of PS for the best models. Sulfixes `fixed` and `llm` indicate the source of the parameters. Sulfixed 20, 60 and 100 indicate the percentage of synthetic data when data augmentation was used. The best performance was that of the model which did not receive any synthetic data. Best model: ⋆ RF; † XGB; ◇ SVC
+
+<img width="600" height="400" alt="image" src="https://github.com/user-attachments/assets/e1e54ef6-0aa5-4daf-9e8e-53652e996e96" />
+
+### Discriminative Score (DS) results
+
+Results of DS for the best models. All models are Random Forests and got perfect accuracy, meaning the real and synthetic data are easily distinguishable.
+
+<img width="600" height="150" alt="image" src="https://github.com/user-attachments/assets/b47b60bb-4c78-4938-928a-f61e53a0cd07" />
+
+### tSNE projections
+
+<img width="600" height="500" src=results/figures/tsne/tsne_results.png />
+
+## Citation
+
+This repository was developed as part of a paper that has yet to be published. It's BibTex will be available here.
+
+## Authors
+  
+- (2024 - today) Renan Matheus da Silva Florencio: Computer Engineering, UNICAMP
+- (Advisor, 2024 - today) Paula Dornhofer Paro Costa: Professor, FEEC-UNICAMP
+  
+## Acknowledgements
+
+This project is part of the Hub for Artificial Intelligence and Cognitive Architectures
+(H.IAAC- Hub de Inteligência Artificial e Arquiteturas Cognitivas). We acknowledge the 
+support of PPI-Softex/MCTI by grant 01245.013778/2020-21 through the Brazilian Federal Government.
+
+---
+
+
+
 
 
