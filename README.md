@@ -98,9 +98,6 @@ client = Groq(
 ### UAH-Driveset Data
 
 We do not have the license to provide UAH-DriveSet in the repository. It must be downloaded from [this link](http://www.robesafe.uah.es/personal/eduardo.romera/uah-driveset/) and placed under the `data` folder interely. After this, you should have `data/base/UAH-DRIVESET-v1`.
-> Descrição do passo-a-passo para instalação de bibliotecas, softwares e demais ferramentas
-> ncessárias para execução do projeto antes de se clonar o repositório, assim como possíveis
-> requesitos mínimos para o projeto (processador, gpu, compilador, etc).
 
 ## Installation / Usage
 
