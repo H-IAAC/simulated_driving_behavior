@@ -204,8 +204,14 @@ Results of DS for the best models. All models are Random Forests and got perfect
 
 ## Citation
 
-This repository was developed as part of a paper that has yet to be published. It's BibTex will be available here.
+<!--Don't remove the following tags, it's used for placing the generated citation from the CFF file-->
+<!--CITATION START-->
+```bibtex
+@software{
 
+}
+```
+<!--CITATION END-->
 ## Authors
   
 - (2024 - today) Renan Matheus da Silva Florencio: Computer Engineering, UNICAMP
@@ -213,9 +219,7 @@ This repository was developed as part of a paper that has yet to be published. I
   
 ## Acknowledgements
 
-This project is part of the Hub for Artificial Intelligence and Cognitive Architectures
-(H.IAAC- Hub de Inteligência Artificial e Arquiteturas Cognitivas). We acknowledge the 
-support of PPI-Softex/MCTI by grant 01245.013778/2020-21 through the Brazilian Federal Government.
+Project supported by the brazilian Ministry of Science, Technology and Innovations, with resources from Law No. 8,248, of October 23, 1991.
 
 ---
 
