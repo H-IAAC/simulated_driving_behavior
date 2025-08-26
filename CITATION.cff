@@ -1,0 +1,33 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: simulated_driving_behavior
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Renan Matheus
+    family-names: da Silva Florencio
+    email: r244808@dac.unicamp.br
+    orcid: 'https://orcid.org/0009-0003-0455-5951'
+    affiliation: FEEC - UNICAMP
+  - given-names: Paula
+    family-names: Dornhofer Paro Costa
+    email: paulad@unicamp.br
+    affiliation: FEEC - UNICAMP
+    orcid: 'https://orcid.org/0009-0003-0455-5951'
+repository-code: 'https://github.com/H-IAAC/simulated_driving_behavior'
+abstract: >-
+  Evaluating quality of data augmentation using CARLA and
+  SUMO driving simulators for classifying normal and
+  aggressive behaviors of UAH-driveset.
+keywords:
+  - sumo-simulator
+  - carla-simulator
+  - synthetic-dataset-generation
+  - driver-behavior-classification
+  - synthetic-data-quality
+  - driver-behavior
+license: LGPL-3.0
