@@ -1,4 +1,4 @@
-# `Driver Behavior Classification and Synthetic Data Quality Evaluation using SUMO and CARLA Simulators`
+# Driver Behavior Classification and Synthetic Data Quality Evaluation using SUMO and CARLA Simulators
 
 This project uses synthetic driving data generated via **SUMO** and **CARLA** simulators to augment **UAH-DriveSet** and classify driver behavior (e.g., *aggressive*, *normal*). Multiple simulation configurations are used to augment the data and train robust machine learning models. The repository includes simulation tools, data processing pipelines, and evaluation notebooks.
 
