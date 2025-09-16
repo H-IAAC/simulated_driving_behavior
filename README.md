@@ -127,6 +127,7 @@ If you want to use another map, you must add the SUMO map files (basically the .
 ### Parameters Configuration
 
 All adjustable SUMO parameters as provided to the LLM are listed below:
+
 ```csv
 Parameter,Default,Range,Description
 minGap,2.5,>= 0,Minimum gap from another vehicle when standing
@@ -174,7 +175,7 @@ vehicle_percentage_speed_difference,30,any float,Difference (%) between vehicle 
 
 These can be found and modified in the ```source/sim/carlaDriverBehParameters.csv``` and ```source/sim/sumoDriverBehParameters.csv``` files.
 
-All the values of the parameters used in the experiment can be found in the `configs` folder. The `_fixed` sulfix means it has been set manually and you are free to change them; the `_llm` sulfix means it was generated using the LLM.
+All the values of the parameters used in the experiment can be found in the `configs` folder. The `_fixed` sulfix means it has been set manually and you are free to directly change them; the `_llm` sulfix means it was generated using the LLM and values are going to be a little bit different each time. If you want to adjust the LLM behavior, you may change the ```source/sim/carlaDriverBehParameters.csv``` and ```source/sim/sumoDriverBehParameters.csv``` files to remove, add or change parameters descriptions; or you can modify the LLM prompt under ```source/sim/llm_api.py```.
 
 The LLM in fact gives a probability distribution for each parameter for each behavior. We then sample from the distribution to create as many set of parameters as desired. The distributions can be seen at the `_dists` files, the minimum and max values are used as 5% tais of a normal distribution.
 
