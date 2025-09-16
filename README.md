@@ -184,23 +184,24 @@ The full results and explanations can be found at the published article related 
 
 Results of TRTS for the best models. None of the models trained on real data had good performance on synthetic data, indicating they are not realist and have low utility. The best model was XGB for all the datasets.
 
-<img width="600" height="150" alt="image" src="https://github.com/user-attachments/assets/e5d262ac-1efa-470d-8e75-e7930581af54" />
+<img width="600" height="150" alt="image" src="https://github.com/user-attachments/assets/43a0bdf9-7b9f-4685-afac-4a6c14aa8997" />
+
 
 ### Predictive Score (PS) results
 
 Results of PS for the best models. Sulfixes `fixed` and `llm` indicate the source of the parameters. Sulfixed 20, 60 and 100 indicate the percentage of synthetic data when data augmentation was used. The best performance was that of the model which did not receive any synthetic data. Best model: ⋆ RF; † XGB; ◇ SVC
 
-<img width="600" height="400" alt="image" src="https://github.com/user-attachments/assets/e1e54ef6-0aa5-4daf-9e8e-53652e996e96" />
+<img width="600" height="500" alt="image" src="https://github.com/user-attachments/assets/9d18c6d3-18e8-4f22-bc66-7504583ff890" />
 
 ### Discriminative Score (DS) results
 
 Results of DS for the best models. All models are Random Forests and got perfect accuracy, meaning the real and synthetic data are easily distinguishable.
 
-<img width="600" height="150" alt="image" src="https://github.com/user-attachments/assets/b47b60bb-4c78-4938-928a-f61e53a0cd07" />
+<img width="600" height="200" alt="image" src="https://github.com/user-attachments/assets/45756de1-2831-4936-9eaa-0cfc6eca7edf" />
 
 ### tSNE projections
 
-<img width="600" height="500" src=results/figures/tsne/tsne_results.png />
+<img width="600" height="600" src=results/figures/tsne/tsne_results.png />
 
 ## Citation
 
