@@ -218,6 +218,7 @@ url = {https://github.com/H-IAAC/simulated_driving_behavior}
 ## Authors
   
 - (2024 - today) Renan Matheus da Silva Florencio: Computer Engineering, UNICAMP
+- (2025 - today) Silvio Fernandes: PhD, Federal Rural University of the Semi-Arid (UFERSA)
 - (Advisor, 2024 - today) Paula Dornhofer Paro Costa: Professor, FEEC-UNICAMP
   
 ## Acknowledgements
