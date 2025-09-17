@@ -119,7 +119,7 @@ pip install -r base-env_requirements.txt
 
 This repository is structured in a way that enables the generation of both CARLA and SUMO synthetic data.
 
-All the noteooks can be found at the `notebooks` folder.
+All notebooks can be found at the `notebooks` folder.
 In order to run the entire experiment, one must start with the CARLA data generation step, where routines for the map are generated.
 
 If you want to use another map, you must add the SUMO map files (basically the .sumocfg and .net files) under the `src/sumo_map` folder, where the `Town01` and `Town05` folders can be found, and provide the interest points in CARLA (they can be set using the `src/sim/carla_interest_point_setter.ipynb` notebook). Every notebook has a variable `FOLDER_NAME` or `town` in the first cell that is used to indicate what is the map being used. `Town01` and `Town05` files converted from CARLA can be found at the CARLA repository, under the co-simulation examples, and although both are provided in this repository, only `Town01` was used in the experiment.
@@ -176,6 +176,13 @@ vehicle_percentage_speed_difference,30,any float,Difference (%) between vehicle 
 These can be found and modified in the ```source/sim/carlaDriverBehParameters.csv``` and ```source/sim/sumoDriverBehParameters.csv``` files.
 
 All the values of the parameters used in the experiment can be found in the `configs` folder. The `_fixed` sulfix means it has been set manually and you are free to directly change them; the `_llm` sulfix means it was generated using the LLM and values are going to be a little bit different each time. If you want to adjust the LLM behavior, you may change the ```source/sim/carlaDriverBehParameters.csv``` and ```source/sim/sumoDriverBehParameters.csv``` files to remove, add or change parameters descriptions; or you can modify the LLM prompt under ```source/sim/llm_api.py```.
+
+<details>
+   <summary>LLM Prompt for Driver Behavior Parameters</summary>
+   
+> _"You are a specialist in driver behavior and know everything about traffic statistics. You need to return range of values in JSON for every one of the parameters that represent how a driver behaves in traffic, give an explanation for why you picked each value. Following, there is a list of parameter, default value, range [minimum-maximum] and description:\n {parameters}.\nThe more aggressive a driver is, the less they tend to cooperate in traffic and the more selfish they are, they tend to drive closer to the car in front (less than 2 meters), drive faster and change lanes more frequently. ALWAYS BE INSIDE THE RANGE LIMIT. Consider the Default value for each parameter as a basis for a normal driver. Consider the answers you gave to the previous parameters when giving your answer. One parameter range of values must not be a subrange of any other parameter range, meaning you should not give overlap the range of other styles, if a aggressive style is given 'min': 0.2 and max: '0.5' for some paramter, another style can not have 'min':0.3, 'max':0.4' for this same paramters, because the ranges overlap each other. Keep the same distance between min and max for every style for each parameter. ALL THE PARAMETERS PROVIDED and BE ALWAYS IN THE SAME FOLLOWING FORMAT containing the parameter name, the style, the min and max values and the reason you picked those values. Note that every parameter has the same JSON structure that may NOT be changed. ALWAYS BE INSIDE THE RANGE LIMIT. PARAMETERS WITH ARE FACTORS WILL ALWAYS BE BETWEEN 0 AND 1. Example of proper JSON: {{'parameter': {{'style': {{'explanation': 'string', 'min': value, 'max': value}}}}}}. For example, if the styles are aggressive and normal: {{'distance_to_leading_vehicle': {{'aggressive': {{'explanation': 'aggresive drivers tend to drive closer to the vehicle in front', 'min': 0.5, 'max': 2}}, 'normal': {{'explanation': 'normal drivers drive at a safer distance', 'min': 2, 'max': 3}}}}}}."_
+   
+</details>
 
 The LLM in fact gives a probability distribution for each parameter for each behavior. We then sample from the distribution to create as many set of parameters as desired. The distributions can be seen at the `_dists` files, the minimum and max values are used as 5% tais of a normal distribution.
 
