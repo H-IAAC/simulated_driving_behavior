@@ -257,7 +257,7 @@ Results of DS for the best models. All models are Random Forests and got perfect
 <!--Don't remove the following tags, it's used for placing the generated citation from the CFF file-->
 <!--CITATION START-->
 ```bibtext
-@software{my_citation,
+@software{simulated_driving_behavior,
 author = {da Silva Florencio, Renan Matheus and Dornhofer Paro Costa, Paula},
 title = {simulated_driving_behavior},
 url = {https://github.com/H-IAAC/simulated_driving_behavior}
