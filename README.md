@@ -265,7 +265,7 @@ Results of DS for the best models. All models are Random Forests and got perfect
 <!--CITATION START-->
 ```bibtext
 @software{simulated_driving_behavior,
-author = {da Silva Florencio, Renan Matheus and Dornhofer Paro Costa, Paula},
+author = {Florencio, Renan and Fernandes, Silvio and Dornhofer Paro Costa, Paula},
 title = {simulated_driving_behavior},
 url = {https://github.com/H-IAAC/simulated_driving_behavior}
 }
